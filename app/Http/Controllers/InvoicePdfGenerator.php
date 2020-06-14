@@ -159,10 +159,11 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 //            ->where('invoices.id', '=',16);
 //        })->get();
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE '$id' GROUP by invoice_items.invoice_id") );
 
 //        dd($invoiceItemsresults);
         //redirect to new page with success messages
-        return view('invoice.show',["invoice_array"=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults]);
+        return view('invoice.show',["invoice_array"=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
 
     }
 

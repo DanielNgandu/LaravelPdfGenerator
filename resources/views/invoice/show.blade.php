@@ -197,7 +197,9 @@
             <td></td>
 
             <td>
-                Total: $385.00
+                @foreach($total as $t)
+                    <p>Total: {{$t->total}}</p>
+                @endforeach
             </td>
         </tr>
     </table>
