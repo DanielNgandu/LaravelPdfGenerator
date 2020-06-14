@@ -16,7 +16,7 @@ class Invoice extends Model
      * @var array
      */
     protected $fillable = [
-        'to', 'from', 'prepared_by','validity_period',
+        'to', 'from','client_physical_address','client_postal_address','client_phone','client_email', 'prepared_by','validity_period',
     ];
 
     /**

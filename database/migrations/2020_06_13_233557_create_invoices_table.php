@@ -17,6 +17,10 @@ class CreateInvoicesTable extends Migration
             $table->id();
             $table->string('to');
             $table->string('from');
+            $table->string('client_physical_address');
+            $table->string('client_postal_address');
+            $table->string('client_phone');
+            $table->string('client_email');
             $table->string('prepared_by');
             $table->dateTime('validity_period')->nullable();
             $table->timestamps();

@@ -47,9 +47,7 @@
                             <tbody>
                             @foreach($invoices_array as $invoice)
                                 <tr>
-
                                     <td>{{$invoice->id}}</td>
-
                                     <td>{{$invoice->to}}</td>
                                     <td>{{$invoice->from}}</td>
                                     <td>{{$invoice->validity_period}}</td>

@@ -65,7 +65,19 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="text" class="col-4 col-form-label">{{ __('Items') }}</label>
 
+                                <div class="col-12">
+                            <div class="field_wrapper">
+                                <div class="col-12">
+                                    <input type="text" class="form-control"  name="field_name[]" value=""/>
+                                    <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                                </div>
+                            </div>
                             <div class="form-group row mb-0">
                                 <div class="col-md-6">
                                     <button type="submit" class="btn btn-lg btn-primary">

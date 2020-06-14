@@ -45,12 +45,18 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 
     {
         $invoice_array = Invoice::findOrFail($id);
+
 //dd($invoice_array);
 
 //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
         $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array]);
+        $date = date('dmy');
+        $pdfName = $date.$invoice_array->to."-invoice.pdf";
+//        $pdf->save(public_path('downloads'), $pdfName);
 
-        return $pdf->download('itsolutionstuff.pdf');
+
+//        return $pdf->download(public_path("downloads/".$date.$invoice_array->to."-invoice.pdf"));
+        return $pdf->download($date.$invoice_array->to."-invoice.pdf");
 
     }
 
