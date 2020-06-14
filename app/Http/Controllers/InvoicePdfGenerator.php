@@ -203,7 +203,10 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
     {
         //
         $invoice = Invoice::findOrFail($id);
+        $deleteInvoiceItems = DB::select( DB::raw("DELETE FROM `invoice_items` WHERE invoice_id = '$id'") );
         $invoice->delete();
+//        dd($deleteInvoiceItems);
+
         //redirect to new page with success messages
         return redirect('/home')
 

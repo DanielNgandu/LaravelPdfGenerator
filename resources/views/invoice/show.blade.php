@@ -13,7 +13,7 @@
             padding: 30px;
             border: 1px solid #eee;
             box-shadow: 0 0 10px rgba(0, 0, 0, .15);
-            font-size: 16px;
+            font-size: 20px;
             line-height: 24px;
             font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
             color: #555;
@@ -49,9 +49,11 @@
         }
 
         .invoice-box table tr.heading td {
-            background: #eee;
-            border-bottom: 1px solid #ddd;
+            /*background: #eee;*/
+            /*border-bottom: 1px solid #ddd;*/
+            color: white;
             font-weight: bold;
+            font-size: larger;
         }
 
         .invoice-box table tr.details td {
@@ -107,19 +109,19 @@
 
 <body>
 <div class="invoice-box pt-5">
-    <table cellpadding="0" cellspacing="0">
+    <table cellpadding="0" cellspacing="0" class="table">
         <tr class="top">
             <td colspan="2">
                 <table>
                     <tr>
-                        <td class="title">
+                        <td class="title nopadding">
                             <div>
-                                <img src="/logos/apple-icon.png" class="rounded-circle" style="height: 50px;">
+                                <h3 class="text-white nopadding"><span style="color: #0EA84C">i</span><span style="color: #185FA4">Br</span><span style="color: #185FA4"><span style="color: #0EA84C">a</span>nd</span></h3>
 
                             </div>
                         </td>
 
-                        <td>
+                        <td class="text-md-right text-justify text-black-50">
                             Invoice #: {{$invoice_array->id}}<br>
                             Created: {{date('d-M-y', strtotime($invoice_array->created_at))}}<br>
                             Due: {{date('d-M-y', strtotime($invoice_array->validity_period))}}
@@ -131,7 +133,7 @@
 
         <tr class="information">
             <td colspan="2">
-                <table>
+                <table class="table table-striped">
                     <tr>
                         <td>
                             iBrand<br>
@@ -149,28 +151,7 @@
                 </table>
             </td>
         </tr>
-
-        <tr class="heading">
-            <td>
-                Payment Method
-            </td>
-
-            <td>
-                Check #
-            </td>
-        </tr>
-
-        <tr class="details">
-            <td>
-                Check
-            </td>
-
-            <td>
-                1000
-            </td>
-        </tr>
-
-        <tr class="heading">
+        <tr class="heading title" style="background-color: #1b4b72;color: #1b4b72">
             <td>
                 Item
             </td>
@@ -198,10 +179,15 @@
 
             <td>
                 @foreach($total as $t)
-                    <p>Total:K {{number_format($t->total,2)}}</p>
+                    <p class="title" style="color: #0EA84C;font-size: larger">Total:K {{number_format($t->total,2)}}</p>
                 @endforeach
             </td>
         </tr>
+        <tfoot>
+        <tr>
+            <td height=30>&copy;<a href="https://www.danielngandu.com">danielngandu.com</a> </td>
+        </tr>
+        </tfoot>
     </table>
 </div>
 </body>

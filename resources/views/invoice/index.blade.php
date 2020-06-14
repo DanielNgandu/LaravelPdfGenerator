@@ -34,10 +34,10 @@
                             </div>
 
                         @endif
-                        <table class="table table-dark table-hover table-responsive d-print-table">
-                            <thead>
+                        <table class="table table-light table-hover table-responsive d-print-table">
+                            <thead class="table-primary">
                             <tr>
-                                <th>#</th>
+                                <th>Invoice#</th>
                                 <th>Client Name</th>
                                 <th>Your Company</th>
                                 <th>Description</th>
