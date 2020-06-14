@@ -181,7 +181,7 @@
         </tr>
 
 
-        @foreach($invoiceitems_array ?? '' as $item)
+        @foreach($invoiceItemsresults ?? '' as $item)
         <tr class="item">
             <td>
                 {{$item->item_description}}
