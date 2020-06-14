@@ -180,35 +180,18 @@
             </td>
         </tr>
 
+
+        @foreach($invoiceitems_array ?? '' as $item)
         <tr class="item">
             <td>
-                Website design
+                {{$item->item_description}}
             </td>
 
             <td>
-                $300.00
+                {{$item->item_cost}}
             </td>
         </tr>
-
-        <tr class="item">
-            <td>
-                Hosting (3 months)
-            </td>
-
-            <td>
-                $75.00
-            </td>
-        </tr>
-
-        <tr class="item last">
-            <td>
-                Domain name (1 year)
-            </td>
-
-            <td>
-                $10.00
-            </td>
-        </tr>
+        @endforeach
 
         <tr class="total">
             <td></td>

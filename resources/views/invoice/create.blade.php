@@ -25,6 +25,58 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label ">{{ __('Client Physical Address') }}</label>
+
+                                <div class="col-12">
+                                    <input id="client_name" type="text" class="form-control @error('client_physical_address') is-invalid @enderror" name="client_physical_address" value="{{ old('client_physical_address') }}" required autocomplete="client_physical_address" autofocus>
+
+                                    @error('client_physical_address')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label ">{{ __('Client Postal Address') }}</label>
+
+                                <div class="col-12">
+                                    <input id="client_name" type="text" class="form-control @error('client_postal_address') is-invalid @enderror" name="client_postal_address" value="{{ old('client_postal_address') }}" required autocomplete="client_physical_address" autofocus>
+
+                                    @error('client_postal_address')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label ">{{ __('Client Phone Contact') }}</label>
+
+                                <div class="col-12">
+                                    <input id="client_phone" type="text" class="form-control @error('client_phone') is-invalid @enderror" name="client_phone" value="{{ old('client_phone') }}" required autocomplete="client_phone" autofocus>
+
+                                    @error('client_phone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label ">{{ __('Client Email Address') }}</label>
+
+                                <div class="col-12">
+                                    <input id="client_phone" type="text" class="form-control @error('client_email') is-invalid @enderror" name="client_email" value="{{ old('client_email') }}" required autocomplete="client_email" autofocus>
+
+                                    @error('client_phone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="name" class="col-4 col-form-label ">{{ __('Your Company Name') }}</label>
 
                                 <div class="col-12">
@@ -71,10 +123,14 @@
                                 <div class="col-12">
                             <div class="field_wrapper">
                                 <div class="col-12">
-                                    <input type="text" class="form-control"  name="field_name[]" value=""/>
-                                    <a href="javascript:void(0);" class="add_button" title="Add field"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    <input type="text" class="form-control"  name="item_name[]"  placeholder="Item" value=""/>
+                                    <input type="text" class="form-control"  name="cost[]" placeholder="K" value=""/>
+
+                                    <a href="javascript:void(0);" class="add_button" title="Add field">
+                                      Add More
                                     </a>
                                 </div>
+                                <hr/>
                             </div>
                                 </div>
                             </div>

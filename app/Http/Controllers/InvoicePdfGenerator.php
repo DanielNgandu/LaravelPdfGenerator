@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Invoice;
+use App\invoiceItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
@@ -72,47 +73,71 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
         //folder/file
         $data = request()->validate([
             'client_name' => 'required|min:5',
+            'client_physical_address' => 'required|min:5',
+            'client_postal_address' => 'required|min:5',
+            'client_phone' => 'required|min:5',
+            'client_email' => 'required|min:5',
             'company_name' => 'required|min:5',
             'user_name' => 'required|min:5',
             'user_id' => 'required',
-            'description' => 'required|min:5',
+            'item_name' => 'required',
+            'cost' => 'required',
         ], [
 
             'client_name.required' => 'client_name is required',
+            'client_physical_address.required' => 'client_physical_address is required',
+            'client_postal_address.required' => 'client_postal_address is required',
+            'client_phone.required' => 'client_name is required',
+            'client_email.required' => 'client_email is required',
             'company_name.required' => 'company_name is required',
             'user_name.required' => 'user_name is required',
             'description.required' => 'description is required',
+            'item_name.required' => 'item_name is required',
+            'cost.required' => 'cost is required',
 
         ]);
+//        dd($request);
+
+
+
         $date = date('dmy');
 
         //Logic start :save the data to the database
         $invoice  = new Invoice() ;
         $invoice->to = $request->client_name;
+        $invoice->client_physical_address = $request->client_physical_address;
+        $invoice->client_postal_address = $request->client_postal_address;
+        $invoice->client_phone = $request->client_phone;
+        $invoice->client_email = $request->client_email;
         $invoice->from = $request->company_name;
-//        $invoice->user_name = $request->user_name;
         $invoice->prepared_by = $request->user_id;
         $invoice->validity_period = $date;
+
 
 
 //        dd($data);
         //Logic end: save request params to our object
         $invoice->save();
+        $last_inserted_invoice_id = $invoice->id;
 
+        $items = $request->item_name;
+        $cost = $request->cost;
+        //loop through array
+        $length = count($items);
+        echo $length;
+        for ($i = 0; $i < $length; $i++) {
+            $itemcostObj = new invoiceItem();
+            print_r($items[$i]."=>".$cost[$i]);
+            $itemcostObj->item_description = $items[$i];
+            $itemcostObj->item_cost =$cost[$i];
+            $itemcostObj->invoice_id = $last_inserted_invoice_id;
+            $itemcostObj->item_quantity = 1;
+            $itemcostObj->save();
+        }
 
-        //redirect to new page with success messages
         return redirect('/home')
 
             ->with('success','You have successfully added a new Product.');
-
-//        return view('invoice.show/'.$request->id,['invoicedata' => $data]);
-//        return redirect('invoice.show/'.$request->id,['invoicedata' => $data]);
-        //redirect to new page with success messages
-//        return view('/invoice/show/'.$request->id)
-//
-//            ->with('success','You have successfully added a new Product.')
-
-//            ->with(['invoicedata',$data]);
 
     }
 
@@ -127,7 +152,13 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
         //
         //
         $invoice_array = Invoice::findOrFail($id);
-//dd($invoice_array);
+        $invoiceitems_array = invoiceItem::findOrFail($id);
+//        $products = DB::table('invoice_items')->where('invoice_id',$id);
+        $products = DB::table('invoice_items')->join('invoices', function ($join) {
+        $join->on('invoice_items.invoice_id', '=', 'invoices.id')
+            ->where('invoices.id', '=',16);
+        })->get();
+dd($products);
         //redirect to new page with success messages
         return view('invoice.show',["invoice_array"=>$invoice_array]);
 
