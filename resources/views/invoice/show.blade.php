@@ -176,7 +176,7 @@
             </td>
 
             <td>
-                Price
+                Price (K)
             </td>
         </tr>
 
@@ -198,7 +198,7 @@
 
             <td>
                 @foreach($total as $t)
-                    <p>Total: {{$t->total}}</p>
+                    <p>Total:K {{$t->total}}</p>
                 @endforeach
             </td>
         </tr>

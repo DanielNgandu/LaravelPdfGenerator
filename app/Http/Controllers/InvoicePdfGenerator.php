@@ -50,7 +50,10 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 //dd($invoice_array);
 
 //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
-        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array]);
+        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE '$id' GROUP by invoice_items.invoice_id") );
+
+        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
         $date = date('dmy');
         $pdfName = $date.$invoice_array->to."-invoice.pdf";
 //        $pdf->save(public_path('downloads'), $pdfName);
@@ -152,12 +155,6 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
         //
         //
         $invoice_array = Invoice::findOrFail($id);
-//        $invoiceitems_array = invoiceItem::findOrFail($id);
-//        $products = DB::table('invoice_items')->where('invoice_id',$id);
-//        $products = DB::table('invoice_items')->join('invoices', function ($join) {
-//        $join->on('invoice_items.invoice_id', '=', 'invoices.id')
-//            ->where('invoices.id', '=',16);
-//        })->get();
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
         $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE '$id' GROUP by invoice_items.invoice_id") );
 
