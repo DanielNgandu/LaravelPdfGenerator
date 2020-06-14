@@ -121,8 +121,8 @@
 
                         <td>
                             Invoice #: {{$invoice_array->id}}<br>
-                            Created: {{$invoice_array->created_at}}<br>
-                            Due: {{$invoice_array->validity_period}}
+                            Created: {{date('d-M-y', strtotime($invoice_array->created_at))}}<br>
+                            Due: {{date('d-M-y', strtotime($invoice_array->validity_period))}}
                         </td>
                     </tr>
                 </table>
@@ -188,7 +188,7 @@
             </td>
 
             <td>
-                {{$item->item_cost}}
+                {{number_format($item->item_cost,2)}}
             </td>
         </tr>
         @endforeach
@@ -198,7 +198,7 @@
 
             <td>
                 @foreach($total as $t)
-                    <p>Total:K {{$t->total}}</p>
+                    <p>Total:K {{number_format($t->total,2)}}</p>
                 @endforeach
             </td>
         </tr>

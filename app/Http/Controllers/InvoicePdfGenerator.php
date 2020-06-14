@@ -191,10 +191,17 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy($id)
     {
         //
+        $invoice = Invoice::findOrFail($id);
+        $invoice->delete();
+        //redirect to new page with success messages
+        return redirect('/home')
+
+            ->with('success','You have successfully deleted an invoice.')
+            ;
     }
 }
