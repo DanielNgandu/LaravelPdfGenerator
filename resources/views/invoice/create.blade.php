@@ -93,7 +93,7 @@
                                 <label for="text" class="col-4 col-form-label">{{ __('User Name') }}</label>
 
                                 <div class="col-12">
-                                    <input id="user_name" type="text" class="form-control @error('user_name') is-invalid @enderror" name="user_name" value="Deemark" required autocomplete="user_name">
+                                    <input id="user_name" type="text" class="form-control @error('user_name') is-invalid @enderror" name="user_name" value="{{ Auth::user()->email }}" required autocomplete="user_name" readonly="readonly">
 
                                     @error('user_name')
                                     <span class="invalid-feedback" role="alert">

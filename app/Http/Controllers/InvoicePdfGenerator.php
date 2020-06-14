@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 {
+
+    //constructor
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -113,7 +119,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
         $invoice->client_phone = $request->client_phone;
         $invoice->client_email = $request->client_email;
         $invoice->from = $request->company_name;
-        $invoice->prepared_by = $request->user_id;
+        $invoice->prepared_by = auth()->user()->id;
         $invoice->validity_period = $date;
 
 
