@@ -71,8 +71,15 @@
         .invoice-box table tr.total td:nth-child(2) {
             border-top: 2px solid #eee;
             font-weight: bold;
-        }
+            text-align: right;
 
+        }
+        .invoice-box table tr td:nth-child(2) {
+            text-align: center;
+        }
+        .invoice-box table tr td:nth-child(3) {
+            text-align: right;
+        }
         @media only screen and (max-width: 600px) {
             .invoice-box table tr.top table td {
                 width: 100%;
@@ -113,35 +120,36 @@
         <tr class="top">
             <td colspan="2">
                 <table>
-                    <tr>
-                        <td class="title nopadding">
-                            <div>
-                                <h3 class="text-white nopadding"><span style="color: #0EA84C">i</span><span style="color: #185FA4">Br</span><span style="color: #185FA4"><span style="color: #0EA84C">a</span>nd</span></h3>
+                    <tr class="information">
+                        <td colspan="3">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td style="padding-right:100px;">
+                                        <h3 class="text-white nopadding"><span style="color: #0EA84C">i</span><span style="color: #185FA4">Br</span><span style="color: #185FA4"><span style="color: #0EA84C">a</span>nd</span></h3>
+                                    </td>
 
-                            </div>
+                                    <td style="text-align:right">
+                                        Invoice #: {{$invoice_array->id}}<br>
+                                        Created: {{date('d-M-y', strtotime($invoice_array->created_at))}}<br>
+                                        Due: {{date('d-M-y', strtotime($invoice_array->validity_period))}}
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
 
-                        <td class="text-md-right text-justify text-black-50">
-                            Invoice #: {{$invoice_array->id}}<br>
-                            Created: {{date('d-M-y', strtotime($invoice_array->created_at))}}<br>
-                            Due: {{date('d-M-y', strtotime($invoice_array->validity_period))}}
-                        </td>
-                    </tr>
-                </table>
-            </td>
         </tr>
 
         <tr class="information">
-            <td colspan="2">
+            <td colspan="3">
                 <table class="table table-striped">
                     <tr>
-                        <td>
+                        <td style="padding-right:100px;">
                             iBrand<br>
                             Plot 23076, PHI,<br>
                             Lusaka,Zambia
                         </td>
 
-                        <td>
+                        <td style="text-align:right">
                             {{$invoice_array->to}}<br>
                             {{$invoice_array->client_physical_address}}<br>
                             {{$invoice_array->client_phone}}<br>
@@ -155,7 +163,9 @@
             <td>
                 Item
             </td>
-
+            <td>
+                Quantity
+            </td>
             <td>
                 Price (K)
             </td>
@@ -167,7 +177,9 @@
             <td>
                 {{$item->item_description}}
             </td>
-
+            <td>
+                {{$item->item_quantity}}
+            </td>
             <td>
                 {{number_format($item->item_cost,2)}}
             </td>
@@ -183,9 +195,25 @@
                 @endforeach
             </td>
         </tr>
+        <tr>
+
+            <td colspan="3">
+                <div class="col-12">
+                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="" readonly="readonly">
+                        <h1>REMITANCE ADVICE</h1>
+                        <br>
+                        <p>aaaaaaaaaaaaaaaa</p>
+                    </textarea>
+                </div>
+            </td>
+        </tr>
         <tfoot>
         <tr>
-            <td height=30>&copy;<a href="https://www.danielngandu.com">danielngandu.com</a> </td>
+{{--            <td>Prepared By:<br> {{ Auth::user()->first_name." ".Auth::user()->last_name }}--}}
+            </td>
+            <br/>
+            <hr/>
+            <td style="font-size: 2px;">&copy;<a href="https://www.danielngandu.com">danielngandu.com</a> </td>
         </tr>
         </tfoot>
     </table>

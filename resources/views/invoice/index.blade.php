@@ -41,6 +41,7 @@
                                 <th>Client Name</th>
                                 <th>Your Company</th>
                                 <th>Description</th>
+                                <th>Date Created</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -50,9 +51,10 @@
                                     <td>{{$invoice->id}}</td>
                                     <td>{{$invoice->to}}</td>
                                     <td>{{$invoice->from}}</td>
-                                    <td>{{$invoice->validity_period}}</td>
+                                    <td>{{$invoice->description}}</td>
+                                    <td>{{$invoice->created_at}}</td>
                                     <td>
-{{--                                        <a href="/edit/invoice/{{$invoice->id}}" class="btn-primary btn-sm">Edit</a>--}}
+                                        <a href="/invoice/sendmail/{{$invoice->id}}" class="btn-warning btn-sm" onclick="return confirm('Are you sure?')">Email</a>
                                         <a href="/invoice/generatePDF/{{$invoice->id}}" class="btn-info btn-sm">Print</a>
                                         <a href="/show/invoice/{{$invoice->id}}" class="btn-success btn-sm">View</a>
                                         <a href="/delete/invoice/{{$invoice->id}}" class="btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>

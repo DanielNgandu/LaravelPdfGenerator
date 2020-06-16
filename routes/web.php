@@ -34,3 +34,6 @@ Route::get('/update/invoice/{id}', 'InvoicePdfGenerator@update')->name('update.i
 Route::get('/delete/invoice/{id}', 'InvoicePdfGenerator@destroy')->name('delete.invoice');
 //generatePdf
 Route::get('/invoice/generatePDF/{id}','InvoicePdfGenerator@generatePDF');
+//send mail
+Route::get('/invoice/sendmail/{id}','InvoicePdfGenerator@sendmail');
+

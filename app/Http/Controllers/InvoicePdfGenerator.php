@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Invoice;
 use App\invoiceItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail as Mail;
 use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 {
 
@@ -21,7 +23,8 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
      */
     public function index()
     {
-        $invoices_array = DB::table('invoices')->latest('created_at')->paginate(10);
+//        $invoices_array = DB::table('invoices')->latest('created_at')->paginate(10)->;
+        $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);;
 
         return view('invoice.index',['invoices_array'=>$invoices_array]);
     }
@@ -61,14 +64,55 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 
         $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
         $date = date('dmy');
-        $pdfName = $date.$invoice_array->to."-invoice.pdf";
-//        $pdf->save(public_path('downloads'), $pdfName);
-
-
-//        return $pdf->download(public_path("downloads/".$date.$invoice_array->to."-invoice.pdf"));
         return $pdf->download($date.$invoice_array->to."-invoice.pdf");
 
     }
+
+
+
+    /**
+
+     * Display a listing of the resource.
+
+     *
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+    public function sendmail($id)
+
+    {
+        $invoice_array = Invoice::findOrFail($id);
+        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE '$id' GROUP by invoice_items.invoice_id") );
+
+        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+        $date = date('dmy');
+//        dd($invoice_array["client_email"]);
+        try{
+            Mail::send('mails.email', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal], function($message)use($invoice_array,$invoiceItemsresults,$invoicetotal,$pdf) {
+                $message->to("dan.ngandu@gmail.com", $invoice_array["client_name"])
+                    ->subject("Invoice")
+                    ->attachData($pdf->output(), "invoice.pdf");
+            });
+        }catch(JWTException $exception){
+            $this->serverstatuscode = "0";
+            $this->serverstatusdes = $exception->getMessage();
+        }
+        if (Mail::failures()) {
+            $this->statusdesc  =   "Error sending mail";
+            $this->statuscode  =   "0";
+
+        }else{
+
+            $this->statusdesc  =   "Message sent Succesfully";
+            $this->statuscode  =   "1";
+        }
+        return $pdf->download($date.$invoice_array->to."-invoice.pdf");
+
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -87,10 +131,12 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
             'client_phone' => 'required|min:5',
             'client_email' => 'required|min:5',
             'company_name' => 'required|min:5',
+            'description' => 'required|min:5',
             'user_name' => 'required|min:5',
             'user_id' => 'required',
             'item_name' => 'required',
             'cost' => 'required',
+            'quantity' => 'required',
         ], [
 
             'client_name.required' => 'client_name is required',
@@ -103,6 +149,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
             'description.required' => 'description is required',
             'item_name.required' => 'item_name is required',
             'cost.required' => 'cost is required',
+            'quantity.required' => 'cost is required',
 
         ]);
 //        dd($request);
@@ -119,6 +166,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
         $invoice->client_phone = $request->client_phone;
         $invoice->client_email = $request->client_email;
         $invoice->from = $request->company_name;
+        $invoice->description = $request->description;
         $invoice->prepared_by = auth()->user()->id;
         $invoice->validity_period = $date;
 
@@ -131,22 +179,23 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 
         $items = $request->item_name;
         $cost = $request->cost;
+        $quantity = $request->quantity;
         //loop through array
         $length = count($items);
         echo $length;
         for ($i = 0; $i < $length; $i++) {
             $itemcostObj = new invoiceItem();
-            print_r($items[$i]."=>".$cost[$i]);
+            print_r($items[$i]."=>".$cost[$i]."=>".$quantity[$i]);
             $itemcostObj->item_description = $items[$i];
             $itemcostObj->item_cost =$cost[$i];
             $itemcostObj->invoice_id = $last_inserted_invoice_id;
-            $itemcostObj->item_quantity = 1;
+            $itemcostObj->item_quantity = $quantity[$i];
             $itemcostObj->save();
         }
 
         return redirect('/home')
 
-            ->with('success','You have successfully added a new Product.');
+            ->with('success','You have successfully added a new Invoice!');
 
     }
 
@@ -162,7 +211,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
         //
         $invoice_array = Invoice::findOrFail($id);
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE '$id' GROUP by invoice_items.invoice_id") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
 //        dd($invoiceItemsresults);
         //redirect to new page with success messages

@@ -108,7 +108,7 @@
                                 <label for="text" class="col-4 col-form-label">{{ __('Description') }}</label>
 
                                 <div class="col-12">
-                                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="Product details"></textarea>
+                                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="Invoice General"></textarea>
 
                                     @error('description')
                                     <span class="invalid-feedback" role="alert">
@@ -124,7 +124,8 @@
                             <div class="field_wrapper">
                                 <div class="col-12">
                                     <input type="text" class="form-control"  name="item_name[]"  placeholder="Item" value=""/>
-                                    <input type="text" class="form-control"  name="cost[]" placeholder="K" value=""/>
+                                    <input type="text" class="form-control"  name="quantity[]" placeholder="Number of Items" value=""/>
+                                    <input type="text" class="form-control"  name="cost[]" placeholder="Per item cost" value=""/>
 
                                     <a href="javascript:void(0);" class="add_button" title="Add field">
                                       Add More
