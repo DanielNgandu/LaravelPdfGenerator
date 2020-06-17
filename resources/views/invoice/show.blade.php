@@ -160,16 +160,16 @@
             </td>
         </tr>
         <tr class="heading title" style="background-color: #1b4b72;color: #1b4b72">
-            <td>
+            <td style="text-align: left;">
                 Item
             </td>
-            <td>
+            <td style="text-align: left;">
                 Quantity
             </td>
-            <td>
+            <td style="text-align: left;">
                 Unit Cost
             </td>
-            <td>
+            <td style="text-align: left;">
                 Price (K)
             </td>
         </tr>
@@ -177,16 +177,16 @@
 
         @foreach($invoiceItemsresults ?? '' as $item)
         <tr class="item">
-            <td>
+            <td style="text-align: left;">
                 {{$item->item_description}}
             </td>
-            <td>
+            <td style="text-align: left;">
                 {{$item->item_quantity}}
             </td>
-            <td>
+            <td style="text-align: left;">
                 {{number_format($item->item_cost,2)}}
             </td>
-            <td>
+            <td style="text-align: left;">
                 {{number_format($item->item_cost * $item->item_quantity,2) }}
             </td>
         </tr>
@@ -204,6 +204,7 @@
 
             <td colspan="4">
                 <div class="col-12">
+                    <h3>PAYMENT DETAILS</h3>
                     <p class="lead">
                         Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.
                     </p>
@@ -212,14 +213,16 @@
         </tr>
         <tfoot>
         <tr>
-{{--            <td>Prepared By:<br> {{ Auth::user()->first_name." ".Auth::user()->last_name }}--}}
+            <td><br>
+                <p class="lead" style="font-size: 20px;">
+                    Prepared By: {{ Auth::user()->first_name." ".Auth::user()->last_name }}</p>
             </td>
             <br/>
-            <hr/>
-            <td style="font-size: 10px;">&copy;<a href="https://www.danielngandu.com">danielngandu.com</a> </td>
         </tr>
         </tfoot>
     </table>
+            <p style="font-size: 10px;">&copy;<a href="https://www.danielngandu.com">danielngandu.com</a> </p>
+
 </div>
 </body>
 </html>
