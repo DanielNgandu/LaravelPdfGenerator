@@ -187,9 +187,8 @@
         @endforeach
 
         <tr class="total">
-            <td></td>
 
-            <td>
+            <td colspan="3"  style="text-align:right;">
                 @foreach($total as $t)
                     <p class="title" style="color: #0EA84C;font-size: larger">Total:K {{number_format($t->total,2)}}</p>
                 @endforeach
@@ -199,11 +198,9 @@
 
             <td colspan="3">
                 <div class="col-12">
-                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="" readonly="readonly">
-                        <h1>REMITANCE ADVICE</h1>
-                        <br>
-                        <p>aaaaaaaaaaaaaaaa</p>
-                    </textarea>
+                    <p class="lead">
+                        Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.
+                    </p>
                 </div>
             </td>
         </tr>
