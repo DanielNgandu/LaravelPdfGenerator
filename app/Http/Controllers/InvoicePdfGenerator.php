@@ -24,7 +24,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
     public function index()
     {
 //        $invoices_array = DB::table('invoices')->latest('created_at')->paginate(10)->;
-        $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);;
+        $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);
 
         return view('invoice.index',['invoices_array'=>$invoices_array]);
     }
@@ -60,7 +60,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 
 //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE '$id' GROUP by invoice_items.invoice_id") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
         $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
         $date = date('dmy');
@@ -85,7 +85,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
     {
         $invoice_array = Invoice::findOrFail($id);
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE '$id' GROUP by invoice_items.invoice_id") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
         $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
         $date = date('dmy');
