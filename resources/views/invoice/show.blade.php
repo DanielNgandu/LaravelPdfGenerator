@@ -118,10 +118,10 @@
 <div class="invoice-box pt-5">
     <table cellpadding="0" cellspacing="0" class="table">
         <tr class="top">
-            <td colspan="2">
+            <td colspan="3">
                 <table>
                     <tr class="information">
-                        <td colspan="3">
+                        <td colspan="4">
                             <table class="table table-striped">
                                 <tr>
                                     <td style="padding-right:100px;">
@@ -140,7 +140,7 @@
         </tr>
 
         <tr class="information">
-            <td colspan="3">
+            <td colspan="4">
                 <table class="table table-striped">
                     <tr>
                         <td style="padding-right:100px;">
@@ -167,6 +167,9 @@
                 Quantity
             </td>
             <td>
+                Unit Cost
+            </td>
+            <td>
                 Price (K)
             </td>
         </tr>
@@ -183,20 +186,23 @@
             <td>
                 {{number_format($item->item_cost,2)}}
             </td>
+            <td>
+                {{number_format($item->item_cost * $item->item_quantity,2) }}
+            </td>
         </tr>
         @endforeach
 
         <tr class="total">
 
-            <td colspan="3"  style="text-align:right;">
+            <td colspan="4"  style="text-align:right;">
                 @foreach($total as $t)
-                    <p class="title" style="color: #0EA84C;font-size: larger">Total:K {{number_format($t->total,2)}}</p>
+                    <p class="title" style="color: #0EA84C;font-size: larger">Total:K {{number_format($t->total * $item->item_quantity,2) }}</p>
                 @endforeach
             </td>
         </tr>
         <tr>
 
-            <td colspan="3">
+            <td colspan="4">
                 <div class="col-12">
                     <p class="lead">
                         Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.
@@ -210,7 +216,7 @@
             </td>
             <br/>
             <hr/>
-            <td style="font-size: 2px;">&copy;<a href="https://www.danielngandu.com">danielngandu.com</a> </td>
+            <td style="font-size: 10px;">&copy;<a href="https://www.danielngandu.com">danielngandu.com</a> </td>
         </tr>
         </tfoot>
     </table>
