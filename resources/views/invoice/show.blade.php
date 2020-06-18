@@ -129,99 +129,104 @@
                                     </td>
 
                                     <td style="text-align:right">
-                                        Invoice #: {{$invoice_array->id}}<br>
+                                      Invoice #: {{$invoice_array->id}}<br>
                                         Created: {{date('d-M-y', strtotime($invoice_array->created_at))}}<br>
-                                        Due: {{date('d-M-y', strtotime($invoice_array->validity_period))}}
+                                       Date Due: {{date('d-M-y', strtotime($invoice_array->validity_period))}}
                                     </td>
                                 </tr>
                             </table>
                         </td>
 
-        </tr>
+                    </tr>
 
-        <tr class="information">
-            <td colspan="4">
-                <table class="table table-striped">
-                    <tr>
-                        <td style="padding-right:100px;">
-                            iBrand<br>
-                            Plot 23076, PHI,<br>
-                            Lusaka,Zambia
-                        </td>
+                    <tr class="information">
+                        <td colspan="4">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td style="padding-right:100px;">
+                                        TPIN - 1017004191,<br>
+                                        <a href="www.ibrandltd.com">www.ibrandltd.com</a> <br>
+                                        <a mailto="sales@ibrandltd.com"></a> sales@ibrandltd.com<br>
+                                        Plot 23076,PHI<br>
+                                        Lusaka,Zambia
+                                    </td>
 
-                        <td style="text-align:right">
-                            {{$invoice_array->to}}<br>
-                            {{$invoice_array->client_physical_address}}<br>
-                            {{$invoice_array->client_phone}}<br>
-                            {{$invoice_array->client_email}}<br>
+                                    <td style="text-align:right">
+                                        {{$invoice_array->to}}<br>
+                                        {{$invoice_array->client_physical_address}}<br>
+                                        {{$invoice_array->client_phone}}<br>
+                                        {{$invoice_array->client_email}}<br>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
+                    <tr class="heading title" style="background-color: #1b4b72;color: #1b4b72">
+                        <td style="text-align: left;">
+                            Item
+                        </td>
+                        <td style="text-align: left;">
+                            Quantity
+                        </td>
+                        <td style="text-align: left;">
+                            Unit Cost
+                        </td>
+                        <td style="text-align: left;">
+                            Price (K)
+                        </td>
+                    </tr>
+
+
+                    @foreach($invoiceItemsresults ?? '' as $item)
+                        <tr class="item">
+                            <td style="text-align: left;">
+                                {{$item->item_description}}
+                            </td>
+                            <td style="text-align: left;">
+                                {{$item->item_quantity}}
+                            </td>
+                            <td style="text-align: left;">
+                                {{number_format($item->item_cost,2)}}
+                            </td>
+                            <td style="text-align: left;">
+                                {{number_format($item->item_cost * $item->item_quantity,2) }}
+                            </td>
+                        </tr>
+                    @endforeach
+
+                    <tr class="total">
+
+                        <td colspan="4"  style="text-align:right;">
+                            @foreach($total as $t)
+                                <p class="title" style="color: #0EA84C;font-size: larger">Total:K {{number_format($t->total,2) }}</p>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4">
+                            <div class="col-12">
+                                <h3>DISCLAIMER</h3>
+                                <hr/>
+                                <p class="lead">
+                                    <strong>Advance Payment of 75% or full payment before work commences</strong>.<br>
+                                    All cheques should be addressed to <strong>iBrand Media Limited</strong> and indicate <strong>quote number</strong>.
+                                <hr/>
+                                kindly note: Lead time is 2 working days
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tfoot>
+                    <tr>
+                        <td><br>
+                            <p class="lead" style="font-size: 20px;">
+                                Prepared By:<strong>{{ Auth::user()->first_name." ".Auth::user()->last_name }}</strong> </p>
+                        </td>
+                    </tr>
+                    </tfoot>
                 </table>
-            </td>
-        </tr>
-        <tr class="heading title" style="background-color: #1b4b72;color: #1b4b72">
-            <td style="text-align: left;">
-                Item
-            </td>
-            <td style="text-align: left;">
-                Quantity
-            </td>
-            <td style="text-align: left;">
-                Unit Cost
-            </td>
-            <td style="text-align: left;">
-                Price (K)
-            </td>
-        </tr>
-
-
-        @foreach($invoiceItemsresults ?? '' as $item)
-        <tr class="item">
-            <td style="text-align: left;">
-                {{$item->item_description}}
-            </td>
-            <td style="text-align: left;">
-                {{$item->item_quantity}}
-            </td>
-            <td style="text-align: left;">
-                {{number_format($item->item_cost,2)}}
-            </td>
-            <td style="text-align: left;">
-                {{number_format($item->item_cost * $item->item_quantity,2) }}
-            </td>
-        </tr>
-        @endforeach
-
-        <tr class="total">
-
-            <td colspan="4"  style="text-align:right;">
-                @foreach($total as $t)
-                    <p class="title" style="color: #0EA84C;font-size: larger">Total:K {{number_format($t->total * $item->item_quantity,2) }}</p>
-                @endforeach
-            </td>
-        </tr>
-        <tr>
-
-            <td colspan="4">
-                <div class="col-12">
-                    <h3>PAYMENT DETAILS</h3>
-                    <p class="lead">
-                        Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.
-                    </p>
-                </div>
-            </td>
-        </tr>
-        <tfoot>
-        <tr>
-            <td><br>
-                <p class="lead" style="font-size: 20px;">
-                    Prepared By: {{ Auth::user()->first_name." ".Auth::user()->last_name }}</p>
-            </td>
-            <br/>
-        </tr>
-        </tfoot>
-    </table>
-            <p style="font-size: 10px;">&copy;<a href="https://www.danielngandu.com">danielngandu.com</a> </p>
+                <p style="font-size: 10px;text-align: right;">&copy;copyright:<a href="https://www.danielngandu.com"> danielngandu.com</a> </p>
 
 </div>
 </body>

@@ -8,7 +8,8 @@ use App\invoiceItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail as Mail;
-use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
+use Barryvdh\DomPDF\Facade as PDF;
+class InvoicePdfGenerator extends Controller
 {
 
     //constructor
@@ -60,7 +61,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
 
 //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
         $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
         $date = date('dmy');
@@ -85,7 +86,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
     {
         $invoice_array = Invoice::findOrFail($id);
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
         $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
         $date = date('dmy');
@@ -211,7 +212,7 @@ use Barryvdh\DomPDF\Facade as PDF;class InvoicePdfGenerator extends Controller
         //
         $invoice_array = Invoice::findOrFail($id);
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum(item_cost) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
 //        dd($invoiceItemsresults);
         //redirect to new page with success messages

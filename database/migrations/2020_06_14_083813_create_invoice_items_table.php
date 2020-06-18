@@ -18,7 +18,7 @@ class CreateInvoiceItemsTable extends Migration
             $table->bigInteger('invoice_id');
             $table->bigInteger('item_quantity');
             $table->string('item_description');
-            $table->float('item_cost');
+            $table->double('item_cost', 15, 8);
             $table->timestamps();
         });
     }
