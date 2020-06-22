@@ -72,45 +72,51 @@ class InvoicePdfGenerator extends Controller
 
 
     /**
+ * Display a listing of the resource.
+ *
 
-     * Display a listing of the resource.
-
-     *
-
-     * @return \Illuminate\Http\Response
-
-     */
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+ */
 
     public function sendmail($id)
 
     {
-        $invoice_array = Invoice::findOrFail($id);
-        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
-
-        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
-        $date = date('dmy');
-//        dd($invoice_array["client_email"]);
         try{
-            Mail::send('mails.email', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal], function($message)use($invoice_array,$invoiceItemsresults,$invoicetotal,$pdf) {
-                $message->to("dan.ngandu@gmail.com", $invoice_array["client_name"])
-                    ->subject("Invoice")
-                    ->attachData($pdf->output(), "invoice.pdf");
-            });
-        }catch(JWTException $exception){
-            $this->serverstatuscode = "0";
-            $this->serverstatusdes = $exception->getMessage();
-        }
-        if (Mail::failures()) {
-            $this->statusdesc  =   "Error sending mail";
-            $this->statuscode  =   "0";
+            $invoice_array = Invoice::findOrFail($id);
+            $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
+            $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
-        }else{
+            $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+            $date = date('dmy');
+//        dd($invoice_array["client_email"]);
+            try{
+                Mail::send('mails.email', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal], function($message)use($invoice_array,$invoiceItemsresults,$invoicetotal,$pdf) {
+                    $message->to("dan.ngandu@gmail.com", $invoice_array["client_name"])
+                        ->subject("Hello Invoice")
+                        ->attachData($pdf->output(), "invoice.pdf");
+                });
+            }catch(JWTException $exception){
+                $this->serverstatuscode = "0";
+                $this->serverstatusdes = $exception->getMessage();
+            }
+            if (Mail::failures()) {
+                $this->statusdesc  =   "Error sending mail";
+                $this->statuscode  =   "0";
 
-            $this->statusdesc  =   "Message sent Succesfully";
-            $this->statuscode  =   "1";
+            }else{
+
+                $this->statusdesc  =   "Message sent Succesfully";
+                $this->statuscode  =   "1";
+            }
+            return redirect('/home')->with('success','Mail sent successfully.')
+                ;
+
+        }catch (\Exception $exception){
+            return redirect('/home')
+                ->with('error','Failed to send mail.')
+                ;
         }
-        return $pdf->download($date.$invoice_array->to."-invoice.pdf");
+
 
     }
 
@@ -252,15 +258,21 @@ class InvoicePdfGenerator extends Controller
     public function destroy($id)
     {
         //
-        $invoice = Invoice::findOrFail($id);
-        $deleteInvoiceItems = DB::select( DB::raw("DELETE FROM `invoice_items` WHERE invoice_id = '$id'") );
-        $invoice->delete();
+//        $invoice = Invoice::findOrFail($id);
+
+//        $invoice->delete();
 //        dd($deleteInvoiceItems);
+        try {
+            $deleteInvoice = DB::select( DB::raw("DELETE FROM `invoices` WHERE id = '$id'") );
 
-        //redirect to new page with success messages
-        return redirect('/home')
+            $deleteInvoiceItems = DB::select( DB::raw("DELETE FROM `invoice_items` WHERE invoice_id = '$id'") );
+        } catch (\Exception $e) {
+            //redirect to new page with success messages
+            return redirect('/home')
 
-            ->with('success','You have successfully deleted an invoice.')
-            ;
+                ->with('success','You have successfully deleted an invoice.')
+                ;
+        }
+
     }
 }

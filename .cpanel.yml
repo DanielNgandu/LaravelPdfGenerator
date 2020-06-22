@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/user/public_html/InvoiceGenerator
+    - /bin/cp -R app $DEPLOYPATH
+    - /bin/cp -R database $DEPLOYPATH
