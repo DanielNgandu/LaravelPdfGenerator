@@ -108,7 +108,7 @@
                                 <label for="text" class="col-4 col-form-label">{{ __('Description') }}</label>
 
                                 <div class="col-12">
-                                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="Invoice General"></textarea>
+                                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="Invoice General Description" value="nvoice General Description"></textarea>
 
                                     @error('description')
                                     <span class="invalid-feedback" role="alert">

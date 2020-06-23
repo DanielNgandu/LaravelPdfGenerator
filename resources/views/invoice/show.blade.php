@@ -144,11 +144,13 @@
                             <table class="table table-striped">
                                 <tr>
                                     <td style="padding-right:100px;">
-                                        TPIN - 1017004191,<br>
-                                        <a href="www.ibrandltd.com">www.ibrandltd.com</a> <br>
-                                        <a mailto="sales@ibrandltd.com"></a> sales@ibrandltd.com<br>
-                                        Plot 23076,PHI<br>
-                                        Lusaka,Zambia
+                                        TPIN: {{$companydets_array->company_tpin}},<br>
+                                        Website: <a href="{{$companydets_array->company_website}}">
+                                      {{$companydets_array->company_website}}</a> <br>
+                                        <a mailto="{{$companydets_array->company_email}}"></a>
+                                        Email: {{$companydets_array->company_email}}<br>
+                          Residential Address: {{$companydets_array->company_physical_address}}<br>
+                               Postal Address: {{$companydets_array->company_postal_address}}
                                     </td>
 
                                     <td style="text-align:right">

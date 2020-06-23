@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\CompanyConfiguration;
 use App\Invoice;
 use App\invoiceItem;
 use Illuminate\Http\Request;
@@ -216,13 +217,15 @@ class InvoicePdfGenerator extends Controller
     {
         //
         //
+        $user_id =auth()->user()->id;
         $invoice_array = Invoice::findOrFail($id);
+        $companydets_array = CompanyConfiguration::findOrFail($user_id);
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
         $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
 //        dd($invoiceItemsresults);
         //redirect to new page with success messages
-        return view('invoice.show',["invoice_array"=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+        return view('invoice.show',["companydets_array"=>$companydets_array,"invoice_array"=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
 
     }
 

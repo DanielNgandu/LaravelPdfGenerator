@@ -37,3 +37,9 @@ Route::get('/invoice/generatePDF/{id}','InvoicePdfGenerator@generatePDF');
 //send mail
 Route::get('/invoice/sendmail/{id}','InvoicePdfGenerator@sendmail');
 
+/// Configurations
+Route::get('/configurations', 'ConfigurationsController@index')->name('companyConfiguration');
+//save company details
+Route::post('/store/company', 'ConfigurationsController@store')->name('configureCompany');
+
+
