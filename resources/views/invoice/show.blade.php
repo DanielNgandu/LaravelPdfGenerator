@@ -147,8 +147,8 @@
                                         TPIN: {{$companydets_array->company_tpin}},<br>
                                         Website: <a href="{{$companydets_array->company_website}}">
                                       {{$companydets_array->company_website}}</a> <br>
-                                        <a mailto="{{$companydets_array->company_email}}"></a>
-                                        Email: {{$companydets_array->company_email}}<br>
+                                        Email:<a mailto="{{$companydets_array->company_email}}"></a>
+                                         {{$companydets_array->company_email}}<br>
                           Residential Address: {{$companydets_array->company_physical_address}}<br>
                                Postal Address: {{$companydets_array->company_postal_address}}
                                     </td>
@@ -212,7 +212,7 @@
                                 <hr/>
                                 <p class="lead">
                                     <strong>Advance Payment of 75% or full payment before work commences</strong>.<br>
-                                    All cheques should be addressed to <strong>iBrand Media Limited</strong> and indicate <strong>quote number</strong>.
+                                    All cheques should be addressed to <strong>{{$companydets_array->company_name}}</strong> and indicate <strong>quote number</strong>.
                                 <hr/>
                                 kindly note: Lead time is 2 working days
                                 </p>

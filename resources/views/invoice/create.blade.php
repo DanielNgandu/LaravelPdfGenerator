@@ -80,7 +80,7 @@
                                 <label for="name" class="col-4 col-form-label ">{{ __('Your Company Name') }}</label>
 
                                 <div class="col-12">
-                                    <input id="company_name" type="text" class="form-control @error('company_name') is-invalid @enderror" name="company_name" value="{{ old('company_name') }}" required autocomplete="company_name" autofocus>
+                                    <input id="company_name" type="text" class="form-control @error('company_name') is-invalid @enderror" name="company_name" value="{{$companydets_array->company_name.' - '.$companydets_array->company_tpin}}" required autocomplete="company_name" readonly="readonly" autofocus>
 
                                     @error('company_name')
                                     <span class="invalid-feedback" role="alert">

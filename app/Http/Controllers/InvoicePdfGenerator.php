@@ -26,9 +26,11 @@ class InvoicePdfGenerator extends Controller
     public function index()
     {
 //        $invoices_array = DB::table('invoices')->latest('created_at')->paginate(10)->;
+        $user_id =auth()->user()->id;
+        $companydets_array = CompanyConfiguration::findOrFail($user_id);
         $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);
 
-        return view('invoice.index',['invoices_array'=>$invoices_array]);
+        return view('invoice.index',['companydets_array'=>$companydets_array,'invoices_array'=>$invoices_array]);
     }
 
     /**
@@ -39,7 +41,10 @@ class InvoicePdfGenerator extends Controller
     public function create()
     {
         //
-        return view('invoice.create');
+        $user_id =auth()->user()->id;
+        $companydets_array = CompanyConfiguration::findOrFail($user_id);
+
+        return view('invoice.create',["companydets_array"=>$companydets_array]);
 
     }
 
@@ -59,12 +64,13 @@ class InvoicePdfGenerator extends Controller
         $invoice_array = Invoice::findOrFail($id);
 
 //dd($invoice_array);
-
+        $user_id =auth()->user()->id;
+        $companydets_array = CompanyConfiguration::findOrFail($user_id);
 //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
         $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
-        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['companydets_array'=>$companydets_array,'invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
         $date = date('dmy');
         return $pdf->download($date.$invoice_array->to."-invoice.pdf");
 
@@ -84,6 +90,8 @@ class InvoicePdfGenerator extends Controller
     {
         try{
             $invoice_array = Invoice::findOrFail($id);
+            $user_id =auth()->user()->id;
+            $companydets_array = CompanyConfiguration::findOrFail($user_id);
             $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
             $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
@@ -91,9 +99,9 @@ class InvoicePdfGenerator extends Controller
             $date = date('dmy');
 //        dd($invoice_array["client_email"]);
             try{
-                Mail::send('mails.email', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal], function($message)use($invoice_array,$invoiceItemsresults,$invoicetotal,$pdf) {
-                    $message->to("dan.ngandu@gmail.com", $invoice_array["client_name"])
-                        ->subject("Hello Invoice")
+                Mail::send('mails.email', ['companydets_array'=>$companydets_array,'invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal], function($message)use($companydets_array, $invoice_array,$invoiceItemsresults,$invoicetotal,$pdf) {
+                    $message->to($companydets_array["company_email"], $invoice_array["client_name"])
+                        ->subject("Invoice")
                         ->attachData($pdf->output(), "invoice.pdf");
                 });
             }catch(JWTException $exception){

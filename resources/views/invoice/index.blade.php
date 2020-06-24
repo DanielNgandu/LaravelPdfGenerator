@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid text-success">
             <div class="container align-content-center">
                 <h1 class="text-center">Welcome</h1>
                 <h3 class="text-center text-uppercase">Laravel Invoice Generator</h3>
@@ -15,8 +15,7 @@
                 <div class="col-9">
                     <div class="pull-left">
                         <h1>Invoice List</h1>
-                        <h2>----------------</h2>
-                        <p></p>
+                        <hr>
                         @if(Session::has('success'))
 
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -69,6 +68,15 @@
                 <div class="col-3">
                     <div class="">
                         <a href="{{route('create.invoice')}}" type="button" class="btn-lg btn-primary">Create New Invoice</a>
+
+{{--                    @if($companydets_array->user_id == Auth::user()->id )--}}
+{{--                            <a href="{{route('create.invoice')}}" type="button" class="btn-lg btn-primary">Create New Invoice</a>--}}
+
+{{--                        @else--}}
+{{--                            <a class="btn-lg btn-primary" href="{{ route('companyConfiguration') }}">Setup Your Company--}}
+
+{{--                            </a>--}}
+{{--                        @endif--}}
                     </div>
                 </div>
             </div>

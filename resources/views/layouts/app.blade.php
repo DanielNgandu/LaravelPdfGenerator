@@ -67,9 +67,14 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
-                                    <a class="dropdown-item" href="{{ route('companyConfiguration') }}">Setup Your Company
+                                    @if($companydets_array->user_id == Auth::user()->id )
 
-                                    </a>
+                                    @else
+                                        <a class="dropdown-item" href="{{ route('companyConfiguration') }}">Setup Your Company
+
+                                        </a>
+                                    @endif
+
                                 </div>
                             </li>
                         @endguest

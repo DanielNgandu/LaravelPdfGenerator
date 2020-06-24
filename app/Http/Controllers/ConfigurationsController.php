@@ -13,12 +13,22 @@ class ConfigurationsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
         //
-        return view('configurations.configureCompany');
+        $user_id = auth()->user()->id;
+        $companydets_array = CompanyConfiguration::findOrFail($user_id);
+        //check if user id has a company configured
+        if($companydets_array->user_id == $user_id ){
+            $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);
+
+            return view('invoice.index',['companydets_array'=>$companydets_array,'invoices_array'=>$invoices_array]);
+        }else
+        //else just show them the index
+
+        return view('configurations.configureCompany',['companydets_array'=>$companydets_array]);
 
     }
 
