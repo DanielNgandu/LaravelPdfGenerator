@@ -20,6 +20,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'ConfigurationsController@index');
+//
 Route::get('/index', 'InvoicePdfGenerator@index');
 //used to create a product
 Route::get('/create/invoice', 'InvoicePdfGenerator@create')->name('create.invoice');

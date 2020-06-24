@@ -27,7 +27,7 @@ class InvoicePdfGenerator extends Controller
     {
 //        $invoices_array = DB::table('invoices')->latest('created_at')->paginate(10)->;
         $user_id =auth()->user()->id;
-        $companydets_array = CompanyConfiguration::findOrFail($user_id);
+        $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
         $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);
 
         return view('invoice.index',['companydets_array'=>$companydets_array,'invoices_array'=>$invoices_array]);
@@ -42,7 +42,7 @@ class InvoicePdfGenerator extends Controller
     {
         //
         $user_id =auth()->user()->id;
-        $companydets_array = CompanyConfiguration::findOrFail($user_id);
+        $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
 
         return view('invoice.create',["companydets_array"=>$companydets_array]);
 
@@ -65,8 +65,8 @@ class InvoicePdfGenerator extends Controller
 
 //dd($invoice_array);
         $user_id =auth()->user()->id;
-        $companydets_array = CompanyConfiguration::findOrFail($user_id);
-//        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
+        $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
+        //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
         $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
@@ -91,7 +91,7 @@ class InvoicePdfGenerator extends Controller
         try{
             $invoice_array = Invoice::findOrFail($id);
             $user_id =auth()->user()->id;
-            $companydets_array = CompanyConfiguration::findOrFail($user_id);
+            $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
             $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
             $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
@@ -227,7 +227,7 @@ class InvoicePdfGenerator extends Controller
         //
         $user_id =auth()->user()->id;
         $invoice_array = Invoice::findOrFail($id);
-        $companydets_array = CompanyConfiguration::findOrFail($user_id);
+        $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
         $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
 
