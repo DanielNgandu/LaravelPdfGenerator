@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'ConfigurationsController@index');
+Route::get('/home', 'CompanyConfigurationsController@index');
 //
 Route::get('/index', 'InvoicePdfGenerator@index');
 //used to create a product
@@ -40,8 +40,23 @@ Route::get('/invoice/generatePDF/{id}','InvoicePdfGenerator@generatePDF');
 Route::get('/invoice/sendmail/{id}','InvoicePdfGenerator@sendmail');
 
 /// Configurations
-Route::get('/configurations', 'ConfigurationsController@index')->name('companyConfiguration');
+///
+/// Company
+Route::get('/configurations', 'CompanyConfigurationsController@index')->name('companyConfiguration');
 //save company details
-Route::post('/store/company', 'ConfigurationsController@store')->name('configureCompany');
+Route::post('/store/company', 'CompanyConfigurationsController@store')->name('configureCompany');
+
+
+///Employee
+Route::get('/newEmployee', 'EmployeeConfigurationsController@index')->name('employeeConfiguration');
+//save employee details
+Route::post('/store/employee', 'EmployeeConfigurationsController@store')->name('saveEmployee');
+
+
+//Update
+
+
+
+
 
 

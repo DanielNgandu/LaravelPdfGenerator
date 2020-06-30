@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 
 
-class ConfigurationsController extends Controller
+class CompanyConfigurationsController extends Controller
 {
     //
     //constructor
@@ -57,6 +57,8 @@ class ConfigurationsController extends Controller
      */
     public function store(Request $request)
     {
+        $user_id = auth()->user()->id;
+
 
         //folder/file
         $data = request()->validate([
@@ -107,12 +109,16 @@ class ConfigurationsController extends Controller
 
         //Logic end: save request params to our object
         $company->save();
+        $last_inserted_id = $company->id;
+        //after company is created, update user with company ID, assuming that user is company owner
+        $update_status = DB::select( DB::raw("UPDATE users SET users.company_id = $last_inserted_id,users.user_level_id = 2 WHERE users.id =$user_id  ") );
+
+            //redirect to new page with success messages
+            return redirect('/home')
+
+                ->with('success','You have successfully configured your company. Create an invoice.');
 
 
-        //redirect to new page with success messages
-        return redirect('/home')
-
-            ->with('success','You have successfully configured your company. Create an invoice.');
     }
 
     /**
