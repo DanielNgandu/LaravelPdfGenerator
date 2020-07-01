@@ -15,8 +15,9 @@
                                 <label for="name" class="col-4 col-form-label ">{{ __('Client Name') }}</label>
 
                                 <div class="col-12">
-                                    <input id="client_name" type="text" class="form-control @error('client_name') is-invalid @enderror" name="client_name" value="{{ old('client_name') }}" required autocomplete="client_name" autofocus>
-
+                                    <select id="selectboxid" class="form-control" >
+                                        <option value="0">--Pick Company--</option>
+                                    </select>
                                     @error('client_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -28,7 +29,7 @@
                                 <label for="name" class="col-4 col-form-label ">{{ __('Client Physical Address') }}</label>
 
                                 <div class="col-12">
-                                    <input id="client_name" type="text" class="form-control @error('client_physical_address') is-invalid @enderror" name="client_physical_address" value="{{ old('client_physical_address') }}" required autocomplete="client_physical_address" autofocus>
+                                    <input id="client_physical_address" type="text" class="form-control @error('client_physical_address') is-invalid @enderror" name="client_physical_address" value="{{ old('client_physical_address') }}" required autocomplete="client_physical_address" autofocus>
 
                                     @error('client_physical_address')
                                     <span class="invalid-feedback" role="alert">
@@ -41,7 +42,7 @@
                                 <label for="name" class="col-4 col-form-label ">{{ __('Client Postal Address') }}</label>
 
                                 <div class="col-12">
-                                    <input id="client_name" type="text" class="form-control @error('client_postal_address') is-invalid @enderror" name="client_postal_address" value="{{ old('client_postal_address') }}" required autocomplete="client_physical_address" autofocus>
+                                    <input id="client_postal_address" type="text" class="form-control @error('client_postal_address') is-invalid @enderror" name="client_postal_address" value="{{ old('client_postal_address') }}" required autocomplete="client_physical_address" autofocus>
 
                                     @error('client_postal_address')
                                     <span class="invalid-feedback" role="alert">
@@ -67,7 +68,7 @@
                                 <label for="name" class="col-4 col-form-label ">{{ __('Client Email Address') }}</label>
 
                                 <div class="col-12">
-                                    <input id="client_phone" type="text" class="form-control @error('client_email') is-invalid @enderror" name="client_email" value="{{ old('client_email') }}" required autocomplete="client_email" autofocus>
+                                    <input id="client_email" type="text" class="form-control @error('client_email') is-invalid @enderror" name="client_email" value="{{ old('client_email') }}" required autocomplete="client_email" autofocus>
 
                                     @error('client_phone')
                                     <span class="invalid-feedback" role="alert">
@@ -165,4 +166,58 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                type: 'GET',
+                url: "{{ route('getAllCompanies') }}",
+                dataType: 'json',
+                success: function (data) {
+                    var companiesArray = data.companydets_array;
+                    var options='<option value="0">--Pick Company--</option>';
+                    for(i=0;i < companiesArray.length;i++) {
+                        options+= '<option value='+companiesArray[i].id+'>'+companiesArray[i].to+'</option>';
+                    }
+                    $('#selectboxid').html(options);
+
+                }
+            });
+
+            //populate clients details
+            $("#selectboxid").change(function () {
+                var id = $("#selectboxid").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '/getCompanyDetsById/'+id,
+                    dataType: 'json',
+                    success: function (data) {
+                        var companiesArray = data.companydets_array;
+                        // var options='';
+                        //     options+= '<option value='+companiesArray[i].id+'>'+companiesArray[i].to+'</option>';
+                        // }
+                        $('#client_physical_address').val(companiesArray[0].client_physical_address);
+                        $('#client_postal_address').val(companiesArray[0].client_postal_address);
+                        $('#client_phone').val(companiesArray[0].client_phone);
+                        $('#client_email').val(companiesArray[0].client_email);
+                        $('#description').val('Enter a general description...');
+
+                    }
+                });
+            });
+        });
+
+
+
+    </script>
+
 @endsection
+<script>
+    // $('.js-data-example-ajax').select2({
+    //     placeholder: "Choose tags...",
+    //     ajax: {
+    //         url: 'https://api.github.com/search/repositories',
+    //         dataType: 'json'
+    //         // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+    //     }
+    // });
+</script>

@@ -58,5 +58,11 @@ Route::post('/store/employee', 'EmployeeConfigurationsController@store')->name('
 
 
 
+//AJAX requests
+Route::get('/getAllCompanies', 'FetchStuffController@getAllCompanies')->name('getAllCompanies');
+Route::get('/getCompanyDetsById/{id}', 'FetchStuffController@getCompanyDetsById');
+
+
+
 
 
