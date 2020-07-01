@@ -77,6 +77,19 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label ">{{ __('Date Due') }}</label>
+
+                                <div class="col-12">
+                                    <input id="validity_period" type="date" class="form-control @error('validity_period') is-invalid @enderror" name="validity_period" value="" required autocomplete="validity_period"  autofocus>
+
+                                    @error('validity_period')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="name" class="col-4 col-form-label ">{{ __('Your Company Name') }}</label>
 
                                 <div class="col-12">

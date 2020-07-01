@@ -11,8 +11,8 @@
             max-width: 800px;
             margin: auto;
             padding: 30px;
-            border: 1px solid #eee;
-            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            /*border: 1px solid #eee;*/
+            /*box-shadow: 0 0 10px rgba(0, 0, 0, .15);*/
             font-size: 20px;
             line-height: 24px;
             font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
@@ -35,17 +35,17 @@
         }
 
         .invoice-box table tr.top table td {
-            padding-bottom: 20px;
+            padding-bottom: 0px;
         }
 
         .invoice-box table tr.top table td.title {
-            font-size: 45px;
+            font-size: 30px;
             line-height: 45px;
             color: #333;
         }
 
         .invoice-box table tr.information table td {
-            padding-bottom: 40px;
+            padding-bottom: 1px;
         }
 
         .invoice-box table tr.heading td {
@@ -57,7 +57,7 @@
         }
 
         .invoice-box table tr.details td {
-            padding-bottom: 20px;
+            padding-bottom: 10px;
         }
 
         .invoice-box table tr.item td{
@@ -115,7 +115,7 @@
 </head>
 
 <body>
-<div class="invoice-box pt-5">
+<div class="invoice-box p1-5">
     <table cellpadding="0" cellspacing="0" class="table">
         <tr class="top">
             <td colspan="3">
@@ -125,7 +125,9 @@
                             <table class="table table-striped">
                                 <tr>
                                     <td style="padding-right:100px;">
-                                        <h3 class="text-white nopadding"><span style="color: #0EA84C">i</span><span style="color: #185FA4">Br</span><span style="color: #185FA4"><span style="color: #0EA84C">a</span>nd</span></h3>
+                                        <h3 class="text-white nopadding">
+                                            {{$companydets_array->company_name}}
+                                        </h3>
                                     </td>
 
                                     <td style="text-align:right">
@@ -144,6 +146,7 @@
                             <table class="table table-striped">
                                 <tr>
                                     <td style="padding-right:100px;">
+                                        <h4>Bill From:</h4>
                                         TPIN: {{$companydets_array->company_tpin}},<br>
                                         Website: <a href="{{$companydets_array->company_website}}">
                                       {{$companydets_array->company_website}}</a> <br>
@@ -152,14 +155,16 @@
                           Residential Address: {{$companydets_array->company_physical_address}}<br>
                                Postal Address: {{$companydets_array->company_postal_address}}
                                     </td>
-
                                     <td style="text-align:right">
+                                        <h4>Bill To:</h4>
                                         {{$invoice_array->to}}<br>
                                         {{$invoice_array->client_physical_address}}<br>
                                         {{$invoice_array->client_phone}}<br>
                                         {{$invoice_array->client_email}}<br>
                                     </td>
+
                                 </tr>
+
                             </table>
                         </td>
                     </tr>
@@ -177,8 +182,6 @@
                             Price (K)
                         </td>
                     </tr>
-
-
                     @foreach($invoiceItemsresults ?? '' as $item)
                         <tr class="item">
                             <td style="text-align: left;">
@@ -209,11 +212,11 @@
                         <td colspan="4">
                             <div class="col-12">
                                 <h3>DISCLAIMER</h3>
-                                <hr/>
-                                <p class="lead">
+                                <p class="text-left">
                                     <strong>Advance Payment of 75% or full payment before work commences</strong>.<br>
                                     All cheques should be addressed to <strong>{{$companydets_array->company_name}}</strong> and indicate <strong>quote number</strong>.
                                 <hr/>
+                                <p>
                                 kindly note: Lead time is 2 working days
                                 </p>
                             </div>
@@ -221,13 +224,14 @@
                     </tr>
                     <tfoot>
                     <tr>
-                        <td><br>
-                            <p class="lead" style="font-size: 20px;">
+                        <td>
+                            <p class="lead" >
                                 Prepared By:<strong>{{ Auth::user()->first_name." ".Auth::user()->last_name }}</strong> </p>
                         </td>
                     </tr>
                     </tfoot>
                 </table>
+            </table>
                 <p style="font-size: 10px;text-align: right;">&copy;copyright:<a href="https://www.danielngandu.com"> danielngandu.com</a> </p>
 
 </div>

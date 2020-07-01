@@ -146,6 +146,7 @@ class InvoicePdfGenerator extends Controller
             'client_postal_address' => 'required|min:5',
             'client_phone' => 'required|min:5',
             'client_email' => 'required|min:5',
+            'validity_period' => 'required',
             'company_name' => 'required|min:5',
             'description' => 'required|min:5',
             'user_name' => 'required|min:5',
@@ -160,6 +161,7 @@ class InvoicePdfGenerator extends Controller
             'client_postal_address.required' => 'client_postal_address is required',
             'client_phone.required' => 'client_name is required',
             'client_email.required' => 'client_email is required',
+            'validity_period.required' => 'validity_period is required',
             'company_name.required' => 'company_name is required',
             'user_name.required' => 'user_name is required',
             'description.required' => 'description is required',
@@ -181,6 +183,7 @@ class InvoicePdfGenerator extends Controller
         $invoice->client_postal_address = $request->client_postal_address;
         $invoice->client_phone = $request->client_phone;
         $invoice->client_email = $request->client_email;
+        $invoice->validity_period = $request->validity_period;
         $invoice->from = $request->company_name;
         $invoice->description = $request->description;
         $invoice->prepared_by = auth()->user()->id;
