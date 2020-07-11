@@ -11,7 +11,7 @@
                         <form method="POST" action="{{route('store.invoice')}}" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="form-group row">
+                            <div class="form-group row" id ="client_name">
                                 <label for="name" class="col-4 col-form-label ">{{ __('Client Name') }}</label>
 
                                 <div class="col-12">
@@ -23,7 +23,13 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
+                                    <a href="javascript:void(0);" class="add_compbutton" title="Add field">
+                                        Add New
+                                    </a>
                                 </div>
+
+                            </div>
+                            <div class="field_compwrapper">
                             </div>
                             <div class="form-group row">
                                 <label for="name" class="col-4 col-form-label ">{{ __('Client Physical Address') }}</label>

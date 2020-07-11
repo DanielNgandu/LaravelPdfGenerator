@@ -22,8 +22,8 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 </head>
 <body>
     <div id="app">
@@ -99,10 +99,20 @@
 </body>
 <script type="text/javascript">
     $(document).ready(function(){
+
+        // $(".itemSearch").select2({
+        //     placeholder: 'Select an option',
+        //     tags: true
+        // });
+
+        var maxCompfield = 1;
         var maxField = 10; //Input fields increment limitation
         var addButton = $('.add_button'); //Add button selector
+        var addCompButton = $('.add_compbutton'); //Add button selector
         var wrapper = $('.field_wrapper'); //Input field wrapper
+        var compwrapper = $('.field_compwrapper'); //Input field wrapper
         var fieldHTML = '<div class="col-12"><input type="text" class="form-control" name="item_name[]" value="" placeholder="Item"/><input type="text" class="form-control"  name="quantity[]" placeholder="Number of Items" value=""/><input type="text" class="form-control" name="cost[]" placeholder="K"/><a href="javascript:void(0);" class="remove_button">Remove</a></div><hr/>'; //New input field html
+        var compfieldHTML = '<div class="form-group row"><label for="client_name" class="col-4 col-form-label ">{{ __("Client Name") }}</label><div class="col-12"><input type="text" class="form-control" name="client_name" value="Add New" placeholder="New Company"/>@error("client_name")<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror</div></div>'; //New input field html
         var x = 1; //Initial field counter is 1
 
         //Once add button is clicked
@@ -114,6 +124,14 @@
             }
         });
 
+
+        //Once add button is clicked
+        $(addCompButton).click(function(){
+            //Check maximum number of input fields
+        $(compwrapper).append(compfieldHTML); //Add field html
+            $("#client_name").remove();
+        });
+
         //Once remove button is clicked
         $(wrapper).on('click', '.remove_button', function(e){
             e.preventDefault();
@@ -121,6 +139,8 @@
             x--; //Decrement field counter
         });
     });
+
+
 </script>
 
 </html>
