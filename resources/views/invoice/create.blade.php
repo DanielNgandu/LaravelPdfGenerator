@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('page_title', 'Create New Invoice')
 
 @section('content')
     <div class="container">
