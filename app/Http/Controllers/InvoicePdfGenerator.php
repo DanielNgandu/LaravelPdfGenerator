@@ -77,6 +77,36 @@ class InvoicePdfGenerator extends Controller
     }
 
 
+        /**
+
+     * Display a listing of the resource.
+
+     *
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+    public function generateReceiptPDF($id)
+
+    {
+        $invoice_array = Invoice::findOrFail($id);
+
+//dd($invoice_array);
+        $user_id =auth()->user()->id;
+        $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
+        //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
+        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+
+        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('receipt.show', ['companydets_array'=>$companydets_array,'invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+        $date = date('dmy');
+        return $pdf->download($date.$invoice_array->to."-invoice.pdf");
+
+    }
+
+
+
 
     /**
  * Display a listing of the resource.
@@ -170,7 +200,7 @@ class InvoicePdfGenerator extends Controller
             'quantity.required' => 'cost is required',
 
         ]);
-//        dd($request);
+    //    dd($request);
 
 
 

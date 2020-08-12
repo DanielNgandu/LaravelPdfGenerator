@@ -40,7 +40,6 @@
                                 <th>Invoice#</th>
                                 <th>Client Name</th>
                                 <th>Your Company</th>
-                                <th>Description</th>
                                 <th>Date Created</th>
                                 <th>Actions</th>
                             </tr>
@@ -51,12 +50,12 @@
                                     <td>{{$invoice->id}}</td>
                                     <td>{{$invoice->to}}</td>
                                     <td>{{$invoice->from}}</td>
-                                    <td>{{$invoice->description}}</td>
                                     <td>{{$invoice->created_at}}</td>
                                     <td>
                                         <a href="/invoice/sendmail/{{$invoice->id}}" class="btn-warning btn-sm" onclick="return confirm('Are you sure?')">Email</a>
                                         <a href="/invoice/generatePDF/{{$invoice->id}}" class="btn-info btn-sm">Print</a>
                                         <a href="/show/invoice/{{$invoice->id}}" class="btn-success btn-sm">View</a>
+                                        <a href="/receipt/generateReceiptPDF/{{$invoice->id}}" class="btn-success btn-sm">Generate Receipt</a>
                                         <a href="/delete/invoice/{{$invoice->id}}" class="btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
                                     </td>
                                 </tr>
@@ -70,14 +69,6 @@
                     <div class="">
                         <a href="{{route('create.invoice')}}" type="button" class="btn-lg btn-primary">Create New Invoice</a>
 
-{{--                    @if($companydets_array->user_id == Auth::user()->id )--}}
-{{--                            <a href="{{route('create.invoice')}}" type="button" class="btn-lg btn-primary">Create New Invoice</a>--}}
-
-{{--                        @else--}}
-{{--                            <a class="btn-lg btn-primary" href="{{ route('companyConfiguration') }}">Setup Your Company--}}
-
-{{--                            </a>--}}
-{{--                        @endif--}}
                     </div>
                 </div>
             </div>

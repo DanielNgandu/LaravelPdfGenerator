@@ -182,9 +182,9 @@
                 success: function (data) {
                     var companiesArray = data.companydets_array;
                     var options='<option value="0">--Pick Company--</option>';
-                    for(i=0;i < companiesArray.length;i++) {
-                        options+= '<option value='+companiesArray[i].id+'>'+companiesArray[i].to+'</option>';
-                    }
+                    // for(i=0;i < companiesArray.length;i++) {
+                        options+= '<option value='+companiesArray[0].id+'>'+companiesArray[0].company_name+'</option>';
+                    // }
                     $('#selectboxid').html(options);
 
                 }
