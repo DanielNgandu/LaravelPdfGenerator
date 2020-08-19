@@ -209,16 +209,7 @@
                     <tr>
 
                         <td colspan="4">
-                            <div class="col-12">
-                                <h3>DISCLAIMER</h3>
-                                <p class="text-left">
-                                    <strong>Advance Payment of 75% or full payment before work commences</strong>.<br>
-                                    All cheques should be addressed to <strong>{{$companydets_array->company_name}}</strong> and indicate <strong>quote number</strong>.
-                                <hr/>
-                                <p>
-                                kindly note: Lead time is 2 working days
-                                </p>
-                            </div>
+                            
                         </td>
                     </tr>
                     <tfoot>

@@ -279,6 +279,16 @@ class InvoicePdfGenerator extends Controller
     public function edit($id)
     {
         //
+        //
+        $user_id =auth()->user()->id;
+        $invoice_array = Invoice::findOrFail($id);
+        $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
+        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
+        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+
+//        dd($invoiceItemsresults);
+        //redirect to new page with success messages
+        return view('invoice.edit',["companydets_array"=>$companydets_array,"invoice_array"=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
     }
 
     /**

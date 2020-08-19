@@ -52,10 +52,11 @@
                                     <td>{{$invoice->from}}</td>
                                     <td>{{$invoice->created_at}}</td>
                                     <td>
-                                        <a href="/invoice/sendmail/{{$invoice->id}}" class="btn-warning btn-sm" onclick="return confirm('Are you sure?')">Email</a>
-                                        <a href="/invoice/generatePDF/{{$invoice->id}}" class="btn-info btn-sm">Print</a>
-                                        <a href="/show/invoice/{{$invoice->id}}" class="btn-success btn-sm">View</a>
+                                        {{-- <a href="/invoice/sendmail/{{$invoice->id}}" class="btn-warning btn-sm" onclick="return confirm('Are you sure?')">Email</a> --}}
+                                        <a href="/invoice/generatePDF/{{$invoice->id}}" class="btn-info btn-sm">Download</a>
+                                        {{-- <a href="/show/invoice/{{$invoice->id}}" class="btn-success btn-sm">View</a> --}}
                                         <a href="/receipt/generateReceiptPDF/{{$invoice->id}}" class="btn-success btn-sm">Generate Receipt</a>
+                                        {{-- <a href="/edit/invoice/{{$invoice->id}}" class="btn-danger btn-sm">Edit</a> --}}
                                         <a href="/delete/invoice/{{$invoice->id}}" class="btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
                                     </td>
                                 </tr>

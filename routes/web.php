@@ -29,7 +29,7 @@ Route::post('/store/invoice', 'InvoicePdfGenerator@store')->name('store.invoice'
 //show
 Route::get('/show/invoice/{id}', 'InvoicePdfGenerator@show')->name('show.invoice');
 //edit
-Route::post('/edit/invoice/{id}', 'InvoicePdfGenerator@edit')->name('edit.invoice');
+Route::get('/edit/invoice/{id}', 'InvoicePdfGenerator@edit')->name('edit.invoice');
 //update
 Route::get('/update/invoice/{id}', 'InvoicePdfGenerator@update')->name('update.invoice');
 //delete
@@ -50,10 +50,10 @@ Route::get('/configurations', 'CompanyConfigurationsController@index')->name('co
 Route::post('/store/company', 'CompanyConfigurationsController@store')->name('configureCompany');
 
 
-///Employee
-Route::get('/newEmployee', 'EmployeeConfigurationsController@index')->name('employeeConfiguration');
-//save employee details
-Route::post('/store/employee', 'EmployeeConfigurationsController@store')->name('saveEmployee');
+// ///Employee
+// Route::get('/newEmployee', 'EmployeeConfigurationsController@index')->name('employeeConfiguration');
+// //save employee details
+// Route::post('/store/employee', 'EmployeeConfigurationsController@store')->name('saveEmployee');
 
 
 //Update
