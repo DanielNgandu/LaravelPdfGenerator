@@ -31,7 +31,7 @@ Route::get('/show/invoice/{id}', 'InvoicePdfGenerator@show')->name('show.invoice
 //edit
 Route::get('/edit/invoice/{id}', 'InvoicePdfGenerator@edit')->name('edit.invoice');
 //update
-Route::get('/update/invoice/{id}', 'InvoicePdfGenerator@update')->name('update.invoice');
+Route::post('/update/invoice', 'InvoicePdfGenerator@update')->name('update.invoice');
 //delete
 Route::get('/delete/invoice/{id}', 'InvoicePdfGenerator@destroy')->name('delete.invoice');
 //generatePdf

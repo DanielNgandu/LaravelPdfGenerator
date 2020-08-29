@@ -56,7 +56,7 @@
                                         <a href="/invoice/generatePDF/{{$invoice->id}}" class="btn-info btn-sm">Download</a>
                                         {{-- <a href="/show/invoice/{{$invoice->id}}" class="btn-success btn-sm">View</a> --}}
                                         <a href="/receipt/generateReceiptPDF/{{$invoice->id}}" class="btn-success btn-sm">Generate Receipt</a>
-                                        {{-- <a href="/edit/invoice/{{$invoice->id}}" class="btn-danger btn-sm">Edit</a> --}}
+                                        <a href="/edit/invoice/{{$invoice->id}}" class="btn-danger btn-sm">Edit</a>
                                         <a href="/delete/invoice/{{$invoice->id}}" class="btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
                                     </td>
                                 </tr>

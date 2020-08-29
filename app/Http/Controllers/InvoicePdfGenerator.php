@@ -281,6 +281,7 @@ class InvoicePdfGenerator extends Controller
         //
         //
         $user_id =auth()->user()->id;
+        //create invoice object
         $invoice_array = Invoice::findOrFail($id);
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
         $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
@@ -298,9 +299,54 @@ class InvoicePdfGenerator extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+//        //
+//        $invoice = Invoice::findOrFail($id);
+//
+//
+//        $date = date('dmy');
+//
+//        //Logic start :save the data to the database
+//
+//        $invoice->to = $request->client_name;
+//        $invoice->client_physical_address = $request->client_physical_address;
+//        $invoice->client_postal_address = $request->client_postal_address;
+//        $invoice->client_phone = $request->client_phone;
+//        $invoice->client_email = $request->client_email;
+//        $invoice->validity_period = $request->validity_period;
+//        $invoice->from = $request->company_name;
+//        $invoice->description = $request->description;
+//        $invoice->prepared_by = auth()->user()->id;
+//        $invoice->validity_period = $date;
+//
+//
+//
+////        dd($data);
+//        //Logic end: save request params to our object
+//        $invoice->save();
+//        $last_inserted_invoice_id = $invoice->id;
+//
+//        $items = $request->item_name;
+//        $cost = $request->cost;
+//        $quantity = $request->quantity;
+//        //loop through array
+//        $length = count($items);
+//        echo $length;
+//        for ($i = 0; $i < $length; $i++) {
+//            $itemcostObj = invoiceItem::where("invoice_id =",[$id])->get();
+//            print_r($itemcostObj);
+//            $itemcostObj->item_description = $items[$i];
+//            $itemcostObj->item_cost =$cost[$i];
+//            $itemcostObj->invoice_id = $last_inserted_invoice_id;
+//            $itemcostObj->item_quantity = $quantity[$i];
+//            $itemcostObj->save();
+//        }
+        if($request->ajax()){
+            invoiceItem::find($request->input('pk'))->update([$request->input('item_quantity') => $request->input('value')]);
+            return response()->json(['success' => true]);
+        }
+
     }
 
     /**
