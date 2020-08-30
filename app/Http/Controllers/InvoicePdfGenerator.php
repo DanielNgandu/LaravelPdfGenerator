@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail as Mail;
 use Barryvdh\DomPDF\Facade as PDF;
+
 class InvoicePdfGenerator extends Controller
 {
 
@@ -18,6 +19,7 @@ class InvoicePdfGenerator extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,12 +27,11 @@ class InvoicePdfGenerator extends Controller
      */
     public function index()
     {
-//        $invoices_array = DB::table('invoices')->latest('created_at')->paginate(10)->;
-        $user_id =auth()->user()->id;
+        $user_id = auth()->user()->id;
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
         $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);
 
-        return view('invoice.index',['companydets_array'=>$companydets_array,'invoices_array'=>$invoices_array]);
+        return view('invoice.index', ['companydets_array' => $companydets_array, 'invoices_array' => $invoices_array]);
     }
 
     /**
@@ -41,21 +42,17 @@ class InvoicePdfGenerator extends Controller
     public function create()
     {
         //
-        $user_id =auth()->user()->id;
+        $user_id = auth()->user()->id;
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
 
-        return view('invoice.create',["companydets_array"=>$companydets_array]);
+        return view('invoice.create', ["companydets_array" => $companydets_array]);
 
     }
 
     /**
-
      * Display a listing of the resource.
-
      *
-
      * @return \Illuminate\Http\Response
-
      */
 
     public function generatePDF($id)
@@ -64,27 +61,23 @@ class InvoicePdfGenerator extends Controller
         $invoice_array = Invoice::findOrFail($id);
 
 //dd($invoice_array);
-        $user_id =auth()->user()->id;
+        $user_id = auth()->user()->id;
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
         //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
-        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+        $invoiceItemsresults = DB::select(DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'"));
+        $invoicetotal = DB::select(DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1"));
 
-        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['companydets_array'=>$companydets_array,'invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['companydets_array' => $companydets_array, 'invoice_array' => $invoice_array, 'invoiceItemsresults' => $invoiceItemsresults, 'total' => $invoicetotal]);
         $date = date('dmy');
-        return $pdf->download($date.$invoice_array->to."-invoice.pdf");
+        return $pdf->download($date . $invoice_array->to . "-invoice.pdf");
 
     }
 
 
-        /**
-
+    /**
      * Display a listing of the resource.
-
      *
-
      * @return \Illuminate\Http\Response
-
      */
 
     public function generateReceiptPDF($id)
@@ -93,67 +86,62 @@ class InvoicePdfGenerator extends Controller
         $invoice_array = Invoice::findOrFail($id);
 
 //dd($invoice_array);
-        $user_id =auth()->user()->id;
+        $user_id = auth()->user()->id;
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
         //        $data = ['title' => 'Welcome to ItSolutionStuff.com'];
-        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+        $invoiceItemsresults = DB::select(DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'"));
+        $invoicetotal = DB::select(DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1"));
 
-        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('receipt.show', ['companydets_array'=>$companydets_array,'invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+        $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('receipt.show', ['companydets_array' => $companydets_array, 'invoice_array' => $invoice_array, 'invoiceItemsresults' => $invoiceItemsresults, 'total' => $invoicetotal]);
         $date = date('dmy');
-        return $pdf->download($date.$invoice_array->to."-invoice.pdf");
+        return $pdf->download($date . $invoice_array->to . "-invoice.pdf");
 
     }
 
 
-
-
     /**
- * Display a listing of the resource.
- *
-
+     * Display a listing of the resource.
+     *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
- */
+     */
 
     public function sendmail($id)
 
     {
-        try{
+        try {
             $invoice_array = Invoice::findOrFail($id);
-            $user_id =auth()->user()->id;
+            $user_id = auth()->user()->id;
             $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
-            $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-            $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+            $invoiceItemsresults = DB::select(DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'"));
+            $invoicetotal = DB::select(DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1"));
 
-            $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+            $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('invoice.show', ['invoice_array' => $invoice_array, 'invoiceItemsresults' => $invoiceItemsresults, 'total' => $invoicetotal]);
             $date = date('dmy');
 //        dd($invoice_array["client_email"]);
-            try{
-                Mail::send('mails.email', ['companydets_array'=>$companydets_array,'invoice_array'=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal], function($message)use($companydets_array, $invoice_array,$invoiceItemsresults,$invoicetotal,$pdf) {
+            try {
+                Mail::send('mails.email', ['companydets_array' => $companydets_array, 'invoice_array' => $invoice_array, 'invoiceItemsresults' => $invoiceItemsresults, 'total' => $invoicetotal], function ($message) use ($companydets_array, $invoice_array, $invoiceItemsresults, $invoicetotal, $pdf) {
                     $message->to($companydets_array["company_email"], $invoice_array["client_name"])
                         ->subject("Invoice")
                         ->attachData($pdf->output(), "invoice.pdf");
                 });
-            }catch(JWTException $exception){
+            } catch (JWTException $exception) {
                 $this->serverstatuscode = "0";
                 $this->serverstatusdes = $exception->getMessage();
             }
             if (Mail::failures()) {
-                $this->statusdesc  =   "Error sending mail";
-                $this->statuscode  =   "0";
+                $this->statusdesc = "Error sending mail";
+                $this->statuscode = "0";
 
-            }else{
+            } else {
 
-                $this->statusdesc  =   "Message sent Succesfully";
-                $this->statuscode  =   "1";
+                $this->statusdesc = "Message sent Succesfully";
+                $this->statuscode = "1";
             }
-            return redirect('/home')->with('success','Mail sent successfully.')
-                ;
+            return redirect('/home')->with('success', 'Mail sent successfully.');
 
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return redirect('/home')
-                ->with('error','Failed to send mail.')
-                ;
+                ->with('error', 'Failed to send mail.');
         }
 
 
@@ -163,7 +151,7 @@ class InvoicePdfGenerator extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function store(Request $request)
@@ -200,14 +188,13 @@ class InvoicePdfGenerator extends Controller
             'quantity.required' => 'cost is required',
 
         ]);
-    //    dd($request);
-
+        //    dd($request);
 
 
         $date = date('dmy');
 
         //Logic start :save the data to the database
-        $invoice  = new Invoice() ;
+        $invoice = new Invoice();
         $invoice->to = $request->client_name;
         $invoice->client_physical_address = $request->client_physical_address;
         $invoice->client_postal_address = $request->client_postal_address;
@@ -218,7 +205,6 @@ class InvoicePdfGenerator extends Controller
         $invoice->description = $request->description;
         $invoice->prepared_by = auth()->user()->id;
         $invoice->validity_period = $date;
-
 
 
 //        dd($data);
@@ -234,125 +220,122 @@ class InvoicePdfGenerator extends Controller
         echo $length;
         for ($i = 0; $i < $length; $i++) {
             $itemcostObj = new invoiceItem();
-            print_r($items[$i]."=>".$cost[$i]."=>".$quantity[$i]);
+            print_r($items[$i] . "=>" . $cost[$i] . "=>" . $quantity[$i]);
             $itemcostObj->item_description = $items[$i];
-            $itemcostObj->item_cost =$cost[$i];
+            $itemcostObj->item_cost = $cost[$i];
             $itemcostObj->invoice_id = $last_inserted_invoice_id;
             $itemcostObj->item_quantity = $quantity[$i];
             $itemcostObj->save();
         }
 
         return redirect('/home')
-
-            ->with('success','You have successfully added a new Invoice!');
+            ->with('success', 'You have successfully added a new Invoice!');
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
         //
         //
-        $user_id =auth()->user()->id;
+        $user_id = auth()->user()->id;
         $invoice_array = Invoice::findOrFail($id);
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
-        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+        $invoiceItemsresults = DB::select(DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'"));
+        $invoicetotal = DB::select(DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1"));
 
 //        dd($invoiceItemsresults);
         //redirect to new page with success messages
-        return view('invoice.show',["companydets_array"=>$companydets_array,"invoice_array"=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+        return view('invoice.show', ["companydets_array" => $companydets_array, "invoice_array" => $invoice_array, 'invoiceItemsresults' => $invoiceItemsresults, 'total' => $invoicetotal]);
 
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         //
         //
-        $user_id =auth()->user()->id;
+        $user_id = auth()->user()->id;
         //create invoice object
         $invoice_array = Invoice::findOrFail($id);
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
-        $invoiceItemsresults = DB::select( DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'") );
-        $invoicetotal = DB::select( DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1") );
+        $invoiceItemsresults = DB::select(DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'"));
+        $invoicetotal = DB::select(DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1"));
 
 //        dd($invoiceItemsresults);
         //redirect to new page with success messages
-        return view('invoice.edit',["companydets_array"=>$companydets_array,"invoice_array"=>$invoice_array,'invoiceItemsresults'=>$invoiceItemsresults,'total'=>$invoicetotal]);
+        return view('invoice.edit', ["companydets_array" => $companydets_array, "invoice_array" => $invoice_array, 'invoiceItemsresults' => $invoiceItemsresults, 'total' => $invoicetotal]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
-//        //
-//        $invoice = Invoice::findOrFail($id);
-//
-//
-//        $date = date('dmy');
-//
-//        //Logic start :save the data to the database
-//
-//        $invoice->to = $request->client_name;
-//        $invoice->client_physical_address = $request->client_physical_address;
-//        $invoice->client_postal_address = $request->client_postal_address;
-//        $invoice->client_phone = $request->client_phone;
-//        $invoice->client_email = $request->client_email;
-//        $invoice->validity_period = $request->validity_period;
-//        $invoice->from = $request->company_name;
-//        $invoice->description = $request->description;
-//        $invoice->prepared_by = auth()->user()->id;
-//        $invoice->validity_period = $date;
-//
-//
-//
-////        dd($data);
-//        //Logic end: save request params to our object
-//        $invoice->save();
-//        $last_inserted_invoice_id = $invoice->id;
-//
-//        $items = $request->item_name;
-//        $cost = $request->cost;
-//        $quantity = $request->quantity;
-//        //loop through array
-//        $length = count($items);
+        //get invoice
+        $invoice_id = $request->invoice_id;
+        //get current invoice object
+        $invoice = Invoice::findOrFail($invoice_id);
+
+//        dd($invoice);
+        //set date format
+        $date = date('dmy');
+
+        //Logic start :save the data to the database
+        $invoice->to = $request->client_name;
+        $invoice->client_physical_address = $request->client_physical_address;
+        $invoice->client_postal_address = $request->client_postal_address;
+        $invoice->client_phone = $request->client_phone;
+        $invoice->client_email = $request->client_email;
+        $invoice->validity_period = $request->validity_period;
+        $invoice->from = $request->company_name;
+        $invoice->description = $request->description;
+        $invoice->prepared_by = auth()->user()->id;
+        $invoice->validity_period = $date;
+        //Logic end: save request params to our object
+        $invoice->save();
+        //update items table
+        $items = $request->item_name;
+        $cost = $request->cost;
+        $quantity = $request->quantity;
+        //loop through array
+        $length = count($items);
 //        echo $length;
-//        for ($i = 0; $i < $length; $i++) {
-//            $itemcostObj = invoiceItem::where("invoice_id =",[$id])->get();
-//            print_r($itemcostObj);
-//            $itemcostObj->item_description = $items[$i];
-//            $itemcostObj->item_cost =$cost[$i];
-//            $itemcostObj->invoice_id = $last_inserted_invoice_id;
-//            $itemcostObj->item_quantity = $quantity[$i];
-//            $itemcostObj->save();
-//        }
-        if($request->ajax()){
-            invoiceItem::find($request->input('pk'))->update([$request->input('item_quantity') => $request->input('value')]);
-            return response()->json(['success' => true]);
+        for ($i = 0; $i < $length; $i++) {
+            $itemcostObj = invoiceItem::where("invoice_id","=",$invoice_id)->firstOrFail();
+//            dd($itemcostObj);
+            $itemcostObj->item_description = $items[$i];
+            $itemcostObj->item_cost = $cost[$i];
+            $itemcostObj->invoice_id = $invoice_id;
+            $itemcostObj->item_quantity = $quantity[$i];
+            //save to our invoiceitems table
+            $itemcostObj->save();
         }
 
+        $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
+        $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);
+
+        return view('invoice.index', ['companydets_array' => $companydets_array, 'invoices_array' => $invoices_array]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy($id)
@@ -363,15 +346,13 @@ class InvoicePdfGenerator extends Controller
 //        $invoice->delete();
 //        dd($deleteInvoiceItems);
         try {
-            $deleteInvoice = DB::select( DB::raw("DELETE FROM `invoices` WHERE id = '$id'") );
+            $deleteInvoice = DB::select(DB::raw("DELETE FROM `invoices` WHERE id = '$id'"));
 
-            $deleteInvoiceItems = DB::select( DB::raw("DELETE FROM `invoice_items` WHERE invoice_id = '$id'") );
+            $deleteInvoiceItems = DB::select(DB::raw("DELETE FROM `invoice_items` WHERE invoice_id = '$id'"));
         } catch (\Exception $e) {
             //redirect to new page with success messages
             return redirect('/home')
-
-                ->with('success','You have successfully deleted an invoice.')
-                ;
+                ->with('success', 'You have successfully deleted an invoice.');
         }
 
     }

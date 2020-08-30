@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <form method="POST" action="{{route('update.invoice')}}" enctype="multipart/form-data">
                             @csrf
-
+                            <input id="invoice_id" name="invoice_id" type="text" readonly="readonly"  value="{{$invoice_array->id}}" hidden="hidden">
                             <div class="form-group row" id="client_name">
                                 <label for="name" class="col-4 col-form-label ">{{ __('Client Name') }}</label>
 
