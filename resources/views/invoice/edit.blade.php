@@ -176,9 +176,10 @@
                                     <table class="table">
                                         <thead class="thead-dark">
                                         <tr>
-                                            <th>No.</th>
-                                            <th>Item</th>
-                                            <th>Quantity</th>
+                                            <th class="w-10">No.</th>
+                                            <th class="w-50">Item Name/Description</th>
+                                            <th class="w-20">Cost per Item (K)</th>
+                                            <th class="w-20">Quantity</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -187,13 +188,28 @@
                                             <tr class="item">
                                                 <td>{{$i}}</td>
                                                 <td>
-                                                    {{$item->item_description}}
-                                                    <input type="text" class="form-control"  name="quantity[]" placeholder="Number of Items" value=""/>
+                                                    <div class="col-xs-4">
+                                                        <input type="text" class="form-control col-xs-4"
+                                                               name="item_name[]" placeholder="Item Name"
+                                                               value="{{$item->item_description}}"/>
+                                                    </div>
 
                                                 </td>
                                                 <td>
-                                                    {{$item->item_quantity}}
+                                                    <div class="col-xs-2">
+                                                        <input type="text" class="form-control col-xs-2" name="cost[]"
+                                                               placeholder="Cost Per Item"
+                                                               value="{{$item->item_cost}}"/>
+                                                    </div>
                                                 </td>
+                                                <td>
+                                                    <div class="col-xs-4">
+                                                        <input type="text" class="form-control col-xs-3"
+                                                               name="quantity[]" placeholder="Number of Items"
+                                                               value="{{$item->item_quantity}}"/>
+                                                    </div>
+                                                </td>
+
 
                                             </tr>
                                             <?php $i++;?>
@@ -247,9 +263,6 @@
                     dataType: 'json',
                     success: function (data) {
                         var companiesArray = data.companydets_array;
-                        // var options='';
-                        //     options+= '<option value='+companiesArray[i].id+'>'+companiesArray[i].to+'</option>';
-                        // }
                         $('#client_physical_address').val(companiesArray[0].client_physical_address);
                         $('#client_postal_address').val(companiesArray[0].client_postal_address);
                         $('#client_phone').val(companiesArray[0].client_phone);
