@@ -25,6 +25,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('vendor/mckenziearts/laravel-notify/css/app.css') }}">
+    @notifyCss
 </head>
 <body>
     <div id="app">
@@ -97,8 +99,12 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('vendor/mckenziearts/laravel-notify/js/app.js') }}"></script>
+    @include('notify::messages')
+    @notifyJs
 </body>
 <script type="text/javascript">
+
     $(document).ready(function(){
 
         // $(".itemSearch").select2({
@@ -143,5 +149,6 @@
 
 
 </script>
+
 
 </html>

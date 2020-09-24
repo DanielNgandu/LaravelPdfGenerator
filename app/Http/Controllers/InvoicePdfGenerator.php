@@ -270,11 +270,10 @@ class InvoicePdfGenerator extends Controller
         $invoice_array = Invoice::findOrFail($id);
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
         $invoiceItemsresults = DB::select(DB::raw("SELECT * FROM invoice_items WHERE invoice_id = '$id'"));
-        $invoicetotal = DB::select(DB::raw("SELECT sum((item_quantity * item_cost)) as total FROM `invoice_items` WHERE invoice_items.invoice_id='$id' GROUP by invoice_items.invoice_id ORDER BY invoice_items.invoice_id DESC LIMIT 1"));
 
 //        dd($invoiceItemsresults);
         //redirect to new page with success messages
-        return view('invoice.edit', ["companydets_array" => $companydets_array, "invoice_array" => $invoice_array, 'invoiceItemsresults' => $invoiceItemsresults, 'total' => $invoicetotal]);
+        return view('invoice.edit', ["companydets_array" => $companydets_array, "invoice_array" => $invoice_array, 'invoiceItemsresults' => $invoiceItemsresults]);
     }
 
     /**
@@ -291,7 +290,7 @@ class InvoicePdfGenerator extends Controller
         //get current invoice object
         $invoice = Invoice::findOrFail($invoice_id);
 
-//        dd($invoice);
+//        dd($request);
         //set date format
         $date = date('dmy');
 
@@ -307,7 +306,7 @@ class InvoicePdfGenerator extends Controller
         $invoice->prepared_by = auth()->user()->id;
         $invoice->validity_period = $date;
         //Logic end: save request params to our object
-        $invoice->save();
+        $invoice->update();
         //update items table
         $items = $request->item_name;
         $cost = $request->cost;
@@ -315,17 +314,20 @@ class InvoicePdfGenerator extends Controller
         //loop through array
         $length = count($items);
 //        echo $length;
+        $rows_affected = 0;
         for ($i = 0; $i < $length; $i++) {
             $itemcostObj = invoiceItem::where("invoice_id","=",$invoice_id)->firstOrFail();
-//            dd($itemcostObj);
+//            dd( $itemcostObj);
             $itemcostObj->item_description = $items[$i];
             $itemcostObj->item_cost = $cost[$i];
-            $itemcostObj->invoice_id = $invoice_id;
             $itemcostObj->item_quantity = $quantity[$i];
-            //save to our invoiceitems table
-            $itemcostObj->save();
-        }
+            //update to our invoiceitems table
+            $itemcostObj->update();
+//            $rows_affected =DB::update("UPDATE invoice_items SET item_description = ?,item_cost = ?, item_quantity = ?  WHERE invoice_items.id = ? AND invoice_id=?",
+//                [$items[$i],$cost[$i],$quantity[$i],$itemcostObj->id,$invoice_id]);
 
+        }
+        dd($rows_affected);
         $companydets_array = DB::table('company_configurations')->where('user_id', auth()->user()->id)->first();
         $invoices_array = DB::table('invoices')->where('prepared_by', auth()->user()->id)->latest()->paginate(10);
 

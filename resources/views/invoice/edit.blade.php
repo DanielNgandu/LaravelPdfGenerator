@@ -12,6 +12,7 @@
                     <div class="card-body">
                         <form method="POST" action="{{route('update.invoice')}}" enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
                             <input id="invoice_id" name="invoice_id" type="text" readonly="readonly"  value="{{$invoice_array->id}}" hidden="hidden">
                             <div class="form-group row" id="client_name">
                                 <label for="name" class="col-4 col-form-label ">{{ __('Client Name') }}</label>
@@ -19,7 +20,7 @@
                                 <div class="col-12">
                                     <input id="client_name" type="text"
                                            class="form-control @error('client_name') is-invalid @enderror"
-                                           name="client_name" value="{{$companydets_array->company_name}}" required
+                                           name="client_name" value="{{$invoice_array->to}}" required
                                            autocomplete="client_name" autofocus>
 
                                     @error('client_name')
@@ -41,7 +42,7 @@
                                     <input id="client_physical_address" type="text"
                                            class="form-control @error('client_physical_address') is-invalid @enderror"
                                            name="client_physical_address"
-                                           value="{{$companydets_array->company_physical_address}}" required
+                                           value="{{$invoice_array->client_physical_address}}" required
                                            autocomplete="client_physical_address" autofocus>
 
                                     @error('client_physical_address')
@@ -59,7 +60,7 @@
                                     <input id="client_postal_address" type="text"
                                            class="form-control @error('client_postal_address') is-invalid @enderror"
                                            name="client_postal_address"
-                                           value="{{$companydets_array->company_postal_address}}" required
+                                           value="{{$invoice_array->client_postal_address}}" required
                                            autocomplete="client_physical_address" autofocus>
 
                                     @error('client_postal_address')
@@ -105,11 +106,11 @@
                                 <label for="name" class="col-4 col-form-label ">{{ __('Date Due') }}</label>
 
                                 <div class="col-12">
-                                    <input id="validity_period" type="date"
+                                    <input id="validity_period" type="text"
                                            class="form-control @error('validity_period') is-invalid @enderror"
                                            name="validity_period"
-                                           placeholder="{{date('d-M-y', strtotime($invoice_array->validity_period))}}"
-                                           value="{{date('d-M-y', strtotime($invoice_array->validity_period))}}"
+                                           placeholder="{{$invoice_array->validity_period}}"
+                                           value="{{$invoice_array->validity_period}}"
                                            required autocomplete="validity_period" autofocus>
 
                                     @error('validity_period')
@@ -161,7 +162,7 @@
                                 <div class="col-12">
                                     <textarea class="form-control" name="description" id="description" rows="3"
                                               placeholder="Invoice General Description"
-                                              value="{{$invoice_array->description}}"></textarea>
+                                              >{{$invoice_array->description}}</textarea>
 
                                     @error('description')
                                     <span class="invalid-feedback" role="alert">
@@ -222,7 +223,7 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-6">
                                     <button type="submit" class="btn btn-lg btn-primary">
-                                        {{ __('Save') }}
+                                        {{ __('Update') }}
                                     </button>
                                     |
                                     <button type="reset" class="btn btn-lg btn-danger">

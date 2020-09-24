@@ -4,6 +4,9 @@
 @section('content')
     <div class="container">
         <div class="jumbotron jumbotron-fluid text-success">
+
+            <x:notify-messages />
+
             <div class="container align-content-center">
                 <h1 class="text-center">Welcome</h1>
                 <h3 class="text-center text-uppercase">Laravel Invoice Generator</h3>
@@ -75,4 +78,6 @@
             </div>
         </div>
     </div>
+    @notifyJs
+
 @endsection
